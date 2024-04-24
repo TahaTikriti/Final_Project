@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 
 const Signin = () => {
@@ -11,7 +10,7 @@ const Signin = () => {
               <div className="mb-10 text-center md:mb-16">
                 <a href="/#" className="mx-auto inline-block max-w-[160px]">
                   <img
-                    src="https://cdn.tailgrids.com/2.0/image/assets/images/logo/logo-primary.svg"
+                    src="./images/logo-color.svg"
                     alt="logo"
                   />
                 </a>
