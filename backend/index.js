@@ -48,6 +48,36 @@ app.get("/searchbyname", async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
+// Route for user login
+app.post("/login", async (req, res) => {
+  try {
+    const { EMAIL, PASSWORD } = req.body;
+    // Check if email and password are provided
+    if (!EMAIL || !PASSWORD) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    // Find the user by email
+    const user = await User.findOne({ EMAIL });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if the provided password matches the user's password
+    if (user.PASSWORD !== PASSWORD) {
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+
+    // Authentication successful, you can generate a token or set a session here
+    // For now, let's send a success response
+    res.json({ message: "Login successful" });
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 
 // Start the server
 app.listen(PORT, () => {
