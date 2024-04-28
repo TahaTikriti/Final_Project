@@ -84,6 +84,41 @@ app.post("/login", async (req, res) => {
 });
 
 
+app.post("/register", async (req, res) => {
+  const { EMAIL, PASSWORD } = req.body;
+
+  // Check if email and password are provided
+  if (!EMAIL || !PASSWORD) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
+
+  try {
+    // Check if user already exists
+    const existingUser = await User.findOne({ EMAIL });
+    if (existingUser) {
+      return res
+        .status(409)
+        .json({ message: "User already exists with this email" });
+    }
+
+    // Create a new user if not existing
+    const newUser = {
+      EMAIL,
+      PASSWORD, // In production, you should hash the password before storing it
+    };
+
+    // Insert the new user into the USER collection
+    await User.insertOne(newUser);
+
+    // Respond with success if the user is registered
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    // Handle errors
+    console.error("Error during registration:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

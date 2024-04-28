@@ -1,29 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
-import RegisterForm from "./registerForm";
+import RegisterForm from "./registerForm"; // Assuming this import is correct
 
 const SignInCard = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      // Send login request to the backend API with the correct path and payload
       const response = await axios.post("http://localhost:5000/login", {
-        EMAIL: email, // Making sure the key is 'EMAIL' as expected by the backend
-        PASSWORD: password, // Making sure the key is 'PASSWORD'
+        EMAIL: email,
+        PASSWORD: password,
       });
-
-      // Assuming response.data includes the success message or user data
       console.log("Login Response:", response.data);
       alert("Login successful!");
-
-      // Implement redirection or update application state as necessary
     } catch (error) {
-      // Handle errors
       console.error("Login Error:", error);
       setError(
         error.response?.data?.message ||
@@ -31,6 +26,10 @@ const SignInCard = () => {
       );
     }
   };
+
+  if (showRegisterForm) {
+    return <RegisterForm setShowRegisterForm={setShowRegisterForm} />;
+  }
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -97,12 +96,13 @@ const SignInCard = () => {
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
-                <a
-                  href="#"
+                <button
+                  type="button"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  onClick={() => setShowRegisterForm(true)} // Toggle to show the RegisterForm
                 >
                   Sign up
-                </a>
+                </button>
               </p>
             </form>
           </div>
