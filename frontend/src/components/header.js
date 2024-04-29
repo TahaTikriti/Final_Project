@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SignInCard from "./sign_in_card"; // Ensure this import path is correct
 import logo from "../images/tutorium-favicon-color.png";
+import "flowbite";
 
 
 const Header = () => {
