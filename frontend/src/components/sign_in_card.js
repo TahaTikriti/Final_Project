@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import RegisterForm from "./registerForm"; // Assuming this import is correct
+import logo from "../images/tutorium-favicon-color.png";
 
 const SignInCard = () => {
   const [email, setEmail] = useState("");
@@ -34,16 +35,14 @@ const SignInCard = () => {
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a
-          href="#"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-        >
-          <img
-            className="w-8 h-8 mr-2"
-            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-            alt="logo"
-          />
-          Tutorium
+        <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse mb-2">
+          <img 
+          src={logo}
+           className="h-10"
+           alt="Tutorium Logo" />
+          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+            Tutorium
+          </span>
         </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
