@@ -1,37 +1,34 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import logo from "../images/tutorium-favicon-color.png";
 
-const RegisterForm = ({ setShowRegisterForm }) => {
+const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // Define the error state
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError("Passwords do not match");
       return;
     }
 
     try {
-      // Post data to the backend via Axios
       const response = await axios.post("http://localhost:5000/register", {
         EMAIL: email,
         PASSWORD: password,
       });
-
-      // Alert or handle the successful response here
       alert("Registration successful!");
-      setShowRegisterForm(false); // Optionally switch back to the login form
+      navigate("/"); // Redirect to home after successful registration
     } catch (error) {
-      // Handle errors in registration, such as user already exists
       setError(
-        "Failed to register. " +
+        "Failed to register: " +
           (error.response?.data?.message || error.message)
-      );
+      ); // Update the error message
     }
   };
 
@@ -107,6 +104,7 @@ const RegisterForm = ({ setShowRegisterForm }) => {
                   placeholder="••••••••"
                 />
               </div>
+              {error && <p className="text-sm text-red-500">{error}</p>}
               <button
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
@@ -116,9 +114,9 @@ const RegisterForm = ({ setShowRegisterForm }) => {
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
                 <a
-                  href="#"
+                  href=""
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                  onClick={() => setShowRegisterForm(false)}
+                  onClick={() => navigate("/login")} // Update to navigate to login form
                 >
                   Login here
                 </a>
