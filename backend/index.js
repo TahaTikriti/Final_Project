@@ -35,24 +35,27 @@ app.get("/users", async (req, res) => {
 });
 
 // Route to search user by name
-app.get("/searchbyname", async (req, res) => {
+app.get('/searchbyname', async (req, res) => {
   try {
     const { name } = req.query;
     if (!name) {
-      return res.status(400).json({ message: "Name parameter is required" });
+      return res.status(400).json({ message: 'Name parameter is required' });
     }
-    // Find user by name
-    const user = await User.findOne({ name });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+
+    // Use a regex pattern to find users whose names contain the provided string, case-insensitive
+    const users = await User.find({ name: { $regex: `^${name}`, $options: 'i' } }).toArray();
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'No users found with the given name prefix' });
     }
-    res.json(user);
+
+    res.json(users);
   } catch (error) {
-    // Handle errors
     console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: 'Server Error' });
   }
 });
+
 // Route for user login
 app.post("/login", async (req, res) => {
   try {
@@ -116,6 +119,55 @@ app.post("/register", async (req, res) => {
     // Handle errors
     console.error("Error during registration:", error);
     res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// Assuming you're using an Express.js server and a User model imported properly
+app.get('/searchbylocation', async (req, res) => {
+  try {
+    const { location } = req.query;
+    if (!location) {
+      return res.status(400).json({ message: 'Location parameter is required' });
+    }
+
+    // Search for users by location field, using case-insensitive search
+    const usersCursor = await User.find({ LOCATION: { $regex: location, $options: 'i' } });
+
+    // Convert cursor to an array
+    const users = await usersCursor.toArray();
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'No users found at the given location' });
+    }
+
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+app.get('/searchbyuni', async (req, res) => {
+  try {
+    const { uni } = req.query;
+    if (!uni) {
+      return res.status(400).json({ message: 'University name parameter is required' });
+    }
+
+    // Search for users by university name, using case-insensitive search
+    const usersCursor = await User.find({ UNIVERSITY_NAME: { $regex: uni, $options: 'i' } });
+
+    // Convert cursor to an array
+    const users = await usersCursor.toArray();
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'No users found for the given university name' });
+    }
+
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 
