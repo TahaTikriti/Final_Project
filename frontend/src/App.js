@@ -14,7 +14,6 @@ import RegisterForm from "./components/registerForm";
 import ProfilePage from "./components/profile_page";
 import Skills from "./components/skills";
 
-
 const App = () => {
   return (
     <Router>
