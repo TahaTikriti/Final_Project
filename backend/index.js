@@ -17,6 +17,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Get a reference to the USER collection
 const User = mongoose.connection.collection("USER");
+// Get a reference to the SKILL collection
+const Skill = mongoose.connection.collection("SKILL");
+
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -170,6 +173,43 @@ app.get('/searchbyuni', async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 });
+
+// Route to search skill by name
+app.get('/searchbyskill', async (req, res) => {
+  try {
+    const { skillname } = req.query;
+    if (!skillname) {
+      return res.status(400).json({ message: 'Skill name parameter is required' });
+    }
+
+    // Use a regex pattern to find skills whose names contain the provided string, case-insensitive
+    const skills = await Skill.find({ SKILL_NAME: { $regex: `^${skillname}`, $options: 'i' } }).toArray();
+
+    if (skills.length === 0) {
+      return res.status(404).json({ message: 'No skills found with the given name' });
+    }
+
+    res.json(skills);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// Route to fetch all skills
+
+app.get("/getskills", async (req, res) => {
+  try {
+    const skills = await Skill.find().toArray(); // Using MongoDB's native method to convert cursor to array
+    res.json(skills);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+
+
 
 
 // Start the server
