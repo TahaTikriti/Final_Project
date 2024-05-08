@@ -1,4 +1,17 @@
-export default function Component() {
+import React, { useState, useEffect } from "react";
+import UserSkill from "./UserSkill";
+
+export default function ProfilePage() {
+  const [skills, setSkills] = useState([]);
+
+  useEffect(() => {
+    // Fetch skills from the database
+    fetch("/skills") // Adjust the API endpoint as needed
+      .then((response) => response.json())
+      .then((data) => setSkills(data))
+      .catch((error) => console.error("Error fetching skills:", error));
+  }, []);
+
   return (
     <div className="w-full bg-gray-100 dark:bg-gray-900 py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
@@ -11,8 +24,8 @@ export default function Component() {
                 className="object-cover h-full w-full"
               />
             </div>
-            <div className="text-center">
-              <h1 className="text-2xl font-bold md:text-3xl flex items-center gap-2">
+            <div className="text-center"> 
+              <h1 className="text-2xl font-bold md:text-3xl flex items-center gap-2 text-white">
                 <UserIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
                 Jared Palmer
               </h1>
@@ -36,95 +49,19 @@ export default function Component() {
           </div>
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-bold flex items-center gap-2">
-                <ActivityIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
+              <h2 className="text-xl font-bold flex items-center gap-2 text-white">
+                <ActivityIcon className="h-6 w-6 text-blue-500 dark:text-blue-400" />
                 Skills
               </h2>
               <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                <div className="space-y-1">
-                  <div className="text-sm font-medium flex items-center gap-2">
-                    <CodeIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                    Python
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2.5">
-                      <div className="bg-primary h-2.5 rounded-full w-[60%]" />
-                    </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      Intermediate
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm font-medium flex items-center gap-2">
-                    <CodeIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                    JavaScript
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2.5">
-                      <div className="bg-primary h-2.5 rounded-full w-[80%]" />
-                    </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      Advanced
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm font-medium flex items-center gap-2">
-                    <CodeIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                    React
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2.5">
-                      <div className="bg-primary h-2.5 rounded-full w-[60%]" />
-                    </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      Intermediate
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm font-medium flex items-center gap-2">
-                    <CodeIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                    SQL
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2.5">
-                      <div className="bg-primary h-2.5 rounded-full w-[100%]" />
-                    </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      Advanced
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm font-medium flex items-center gap-2">
-                    <CodeIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                    HTML/CSS
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2.5">
-                      <div className="bg-primary h-2.5 rounded-full w-[80%]" />
-                    </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      Advanced
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm font-medium flex items-center gap-2">
-                    <CodeIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                    Java
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2.5">
-                      <div className="bg-primary h-2.5 rounded-full w-[40%]" />
-                    </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      Beginner
-                    </span>
-                  </div>
-                </div>
+                {skills.map((skill) => (
+                  <UserSkill
+                    key={skill.id} // Assuming each skill has a unique id
+                    skillName={skill.name}
+                    proficiency={skill.proficiency}
+                    percentage={skill.percentage}
+                  />
+                ))}
               </div>
             </div>
             <div>
@@ -145,51 +82,6 @@ export default function Component() {
                     <ClockIcon className="h-4 w-4 fill-primary" />
                     <span className="text-sm text-gray-500 dark:text-gray-400">
                       2:00 PM - 5:00 PM
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm font-medium">Tuesday</div>
-                  <div className="flex items-center gap-2">
-                    <ClockIcon className="h-4 w-4 fill-primary" />
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      10:00 AM - 2:00 PM
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm font-medium">Wednesday</div>
-                  <div className="flex items-center gap-2">
-                    <ClockIcon className="h-4 w-4 fill-primary" />
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      1:00 PM - 6:00 PM
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm font-medium">Thursday</div>
-                  <div className="flex items-center gap-2">
-                    <ClockIcon className="h-4 w-4 fill-primary" />
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      11:00 AM - 3:00 PM
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm font-medium">Friday</div>
-                  <div className="flex items-center gap-2">
-                    <ClockIcon className="h-4 w-4 fill-primary" />
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      2:00 PM - 6:00 PM
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm font-medium">Saturday</div>
-                  <div className="flex items-center gap-2">
-                    <ClockIcon className="h-4 w-4 fill-primary" />
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      10:00 AM - 4:00 PM
                     </span>
                   </div>
                 </div>
