@@ -12,6 +12,8 @@ import HeroSection from "./components/hero_section";
 import SignInCard from "./components/sign_in_card";
 import RegisterForm from "./components/registerForm";
 import ProfilePage from "./components/profile_page";
+import Skills from "./components/skills";
+
 
 const App = () => {
   return (
@@ -24,7 +26,7 @@ const App = () => {
 const AppContent = () => {
   const location = useLocation();
   const showHeader =
-    location.pathname === "/" || location.pathname === "/profile";
+    location.pathname === "/" || location.pathname === "/profile" || location.pathname === "/topics";
 
   return (
     <>
@@ -34,6 +36,7 @@ const AppContent = () => {
         <Route path="/login" element={<SignInCard />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/topics" element={<Skills />} />
       </Routes>
     </>
   );
