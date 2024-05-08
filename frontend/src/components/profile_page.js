@@ -12,6 +12,14 @@ export default function ProfilePage() {
       .catch((error) => console.error("Error fetching skills:", error));
   }, []);
 
+  const checkSession = () => {
+    const sessionToken = localStorage.getItem('sessionToken');
+    if (sessionToken) {
+      alert('You are in session');
+    } else {
+      alert('There is no session');
+    }
+  };
   return (
     <div className="w-full bg-gray-100 dark:bg-gray-900 py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">

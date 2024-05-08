@@ -2,8 +2,16 @@ import React, { useState, useEffect } from 'react';
 
 function Skills() {
   const [skills, setSkills] = useState([]);
+  const [loggedInEmail, setLoggedInEmail] = useState("");
 
   useEffect(() => {
+    // Retrieve the logged-in email from sessionStorage if available
+    const storedEmail = sessionStorage.getItem("userEmail");
+    if (storedEmail) {
+      setLoggedInEmail(storedEmail);
+    }
+
+    // Fetch skills data
     fetch('http://localhost:5000/getskills')  // Adjust the URL as needed
       .then(response => response.json())
       .then(data => setSkills(data))
@@ -14,6 +22,12 @@ function Skills() {
     <section className="w-full py-12 md:py-24 lg:py-32">
       <div className="container grid gap-8 px-4 md:px-6">
         <div className="space-y-3 text-center">
+          {/* Display the logged-in email */}
+          {loggedInEmail && (
+            <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl">
+              Logged in as: {loggedInEmail}
+            </h1>
+          )}
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
             Explore the Latest Technologies
           </h2>
