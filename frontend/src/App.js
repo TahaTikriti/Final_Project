@@ -13,6 +13,7 @@ import SignInCard from "./components/sign_in_card";
 import RegisterForm from "./components/registerForm";
 import ProfilePage from "./components/profile_page";
 import Skills from "./components/skills";
+import Tutors from "./components/tutors";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const AppContent = () => {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/topics" element={<Skills />} />
+        <Route path="/tutors" element={<Tutors />} />
       </Routes>
     </>
   );
