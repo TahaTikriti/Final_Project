@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Header from './header'; // Adjust the import path as necessary
 
 export default function Component() {
   const [tutors, setTutors] = useState([]);
@@ -6,7 +7,6 @@ export default function Component() {
   useEffect(() => {
     const fetchTutors = async () => {
       try {
-        // Ensure you are using the correct full URL if needed
         const response = await fetch('http://localhost:5000/users');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -20,23 +20,12 @@ export default function Component() {
   
     fetchTutors();
   }, []);
-  
 
   return (
     <>
-      <header className="bg-gray-100 dark:bg-gray-900 py-4 border-b border-gray-200 dark:border-gray-800">
-        <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
-          <nav className="flex items-center space-x-6">
-            <a className="text-gray-900 dark:text-gray-100 font-medium hover:text-gray-700 dark:hover:text-gray-300 transition-colors" href="#">Home</a>
-            <a className="text-gray-900 dark:text-gray-100 font-medium hover:text-gray-700 dark:hover:text-gray-300 transition-colors" href="#">About Us</a>
-            <a className="text-gray-900 dark:text-gray-100 font-medium hover:text-gray-700 dark:hover:text-gray-300 transition-colors" href="#">Services</a>
-            <a className="text-gray-900 dark:text-gray-100 font-medium hover:text-gray-700 dark:hover:text-gray-300 transition-colors" href="#">Contact</a>
-          </nav>
-          <div className="w-full max-w-md">
-            <input type="text" className="w-full px-4 py-2 rounded-md bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors" placeholder="Search by name, subject, or tag..." />
-          </div>
-        </div>
-      </header>
+      {/* Replace the existing header/navigation with the imported Header component */}
+      <Header />
+
       <main className="bg-gray-100 dark:bg-gray-900 py-12 md:py-16">
         <div className="container mx-auto px-4 md:px-6">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-8">Our Experienced Tutors</h1>
