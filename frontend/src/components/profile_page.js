@@ -27,12 +27,12 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center gap-4">
             <div className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden">
               <img
-                src="/placeholder-avatar.jpg"
+                src="https://avatar.iran.liara.run/public"
                 alt="@shadcn"
                 className="object-cover h-full w-full"
               />
             </div>
-            <div className="text-center"> 
+            <div className="text-center">
               <h1 className="text-2xl font-bold md:text-3xl flex items-center gap-2 text-white">
                 <UserIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
                 Jared Palmer
