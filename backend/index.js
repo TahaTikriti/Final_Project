@@ -67,7 +67,7 @@ app.get("/searchbyname", async (req, res) => {
 });
 
 
-// Modified login route with bcrypt for password hashing and session management
+// Modified login route without bcrypt for password hashing and session management
 app.post("/login", async (req, res) => {
   try {
     const { EMAIL, PASSWORD } = req.body;
@@ -82,14 +82,14 @@ app.post("/login", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Compare the provided password with the hashed password in the database
-    const isMatch = await bcrypt.compare(PASSWORD, user.PASSWORD);
-    if (!isMatch) {
+    // Compare the provided password with the password in the database
+    if (PASSWORD !== user.PASSWORD) {
       return res.status(401).json({ message: "Incorrect password" });
     }
 
     // Save user information in the session
     req.session.user = { id: user._id, email: EMAIL };
+   console.log("user" + JSON.stringify(req.session.user));
     res.json({ message: "Login successful", sessionID: req.sessionID });
   } catch (error) {
     console.error(error);
@@ -202,9 +202,19 @@ app.get("/getskills", async (req, res) => {
 });
 
 
+// Route to check if user is logged in
+app.get('/session', (req, res) => {
+  if (req.session && req.session.user) {
+    res.json({ isAuthenticated: true, user: req.session.user });
+  } else {
+    res.json({ isAuthenticated: false });
+  }
+});
 
 
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+

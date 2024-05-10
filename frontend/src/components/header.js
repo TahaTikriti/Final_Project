@@ -1,9 +1,30 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../images/tutorium-favicon-color.png";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const Header = () => {
-  const navigate = useNavigate(); // Hook to enable navigation
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/session") // Adjust the endpoint as necessary
+      .then((response) => {
+        if (response.data.isAuthenticated) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking session", error);
+        setIsLoggedIn(false);
+      });
+  }, []);
+
+  
 
   return (
     <header>
