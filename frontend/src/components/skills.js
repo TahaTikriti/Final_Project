@@ -40,12 +40,9 @@ function Skills() {
             <div key={index} className="rounded-lg bg-white p-6 shadow-sm transition-all hover:scale-105 hover:shadow-md dark:bg-gray-950">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-md bg-gray-100 dark:bg-gray-800">
-                  {/* Placeholder for icons */}
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
+                  <img src={skill.URL} alt={skill.SKILL_NAME} className="h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-semibold">{skill.SKILL_NAME}</h3>
+                <h3 className="text-lg font-semibold text-white">{skill.SKILL_NAME}</h3>
               </div>
               <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
                 {skill.DESCRIPTION}
