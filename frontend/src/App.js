@@ -36,7 +36,7 @@ const AppContent = () => {
         <Route path="/login" element={<SignInCard />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/topics" element={<Skills />} />
+        <Route path="/topics" element={<Skills />} /> 
         <Route path="/tutors" element={<Tutors />} />
       </Routes>
     </>

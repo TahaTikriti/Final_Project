@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 require("dotenv").config();
 const cors = require("cors");
+const crypto = require("crypto");
+const sessionSecret = process.env.SESSION_SECRET 
+const bcrypt = require("bcryptjs");
+
 
 const app = express();
 app.use(cors());
@@ -21,10 +25,10 @@ app.use(express.json());
 // Configure express-session middleware
 app.use(
   session({
-    secret: "your_secret_key", // Replace with a real, secure secret key
+    secret: sessionSecret, // Replace with a real, secure secret key
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Set to true if the app runs on HTTPS
+    cookie: { secure: false, maxAge: 60 * 60 * 1000 }, // Set to true if the app runs on HTTPS
   })
 );
 
@@ -62,12 +66,15 @@ app.get("/searchbyname", async (req, res) => {
   }
 });
 
-// Modified login route with session management
+
+// Modified login route with bcrypt for password hashing and session management
 app.post("/login", async (req, res) => {
   try {
     const { EMAIL, PASSWORD } = req.body;
     if (!EMAIL || !PASSWORD) {
-      return res.status(400).json({ message: "Email and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
     }
 
     const user = await User.findOne({ EMAIL });
@@ -75,11 +82,13 @@ app.post("/login", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (user.PASSWORD !== PASSWORD) {
+    // Compare the provided password with the hashed password in the database
+    const isMatch = await bcrypt.compare(PASSWORD, user.PASSWORD);
+    if (!isMatch) {
       return res.status(401).json({ message: "Incorrect password" });
     }
 
-    // Save user information in session
+    // Save user information in the session
     req.session.user = { id: user._id, email: EMAIL };
     res.json({ message: "Login successful", sessionID: req.sessionID });
   } catch (error) {
@@ -87,7 +96,6 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
-
 // Registration route
 app.post("/register", async (req, res) => {
   const { EMAIL, PASSWORD } = req.body;
