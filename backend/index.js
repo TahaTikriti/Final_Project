@@ -4,12 +4,17 @@ const session = require("express-session");
 require("dotenv").config();
 const cors = require("cors");
 const crypto = require("crypto");
-const sessionSecret = process.env.SESSION_SECRET 
+const sessionSecret = process.env.SESSION_SECRET;
 const bcrypt = require("bcryptjs");
-
+const MongoStore = require("connect-mongo");
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://localhost:5000"], // Replace with your frontend's origin
+    credentials: true, // Crucial for cookies to be sent with requests
+  })
+);
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
@@ -25,10 +30,11 @@ app.use(express.json());
 // Configure express-session middleware
 app.use(
   session({
-    secret: sessionSecret, // Replace with a real, secure secret key
+    secret: sessionSecret,
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false, maxAge: 60 * 60 * 1000 }, // Set to true if the app runs on HTTPS
+    saveUninitialized: false, // Don't save session until something is modified
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+    cookie: { secure: false, httpOnly: true, maxAge: 3600000 }, // 1 hour
   })
 );
 
@@ -56,7 +62,9 @@ app.get("/searchbyname", async (req, res) => {
     }).toArray();
 
     if (users.length === 0) {
-      return res.status(404).json({ message: "No users found with the given name prefix" });
+      return res
+        .status(404)
+        .json({ message: "No users found with the given name prefix" });
     }
 
     res.json(users);
@@ -65,7 +73,6 @@ app.get("/searchbyname", async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
-
 
 // Modified login route without bcrypt for password hashing and session management
 app.post("/login", async (req, res) => {
@@ -89,7 +96,8 @@ app.post("/login", async (req, res) => {
 
     // Save user information in the session
     req.session.user = { id: user._id, email: EMAIL };
-   console.log("user" + JSON.stringify(req.session.user));
+    console.log("user" + JSON.stringify(req.session.user));
+    console.log(req.session);
     res.json({ message: "Login successful", sessionID: req.sessionID });
   } catch (error) {
     console.error(error);
@@ -106,7 +114,9 @@ app.post("/register", async (req, res) => {
   try {
     const existingUser = await User.findOne({ EMAIL });
     if (existingUser) {
-      return res.status(409).json({ message: "User already exists with this email" });
+      return res
+        .status(409)
+        .json({ message: "User already exists with this email" });
     }
 
     const newUser = { EMAIL, PASSWORD };
@@ -124,7 +134,9 @@ app.get("/searchbylocation", async (req, res) => {
   try {
     const { location } = req.query;
     if (!location) {
-      return res.status(400).json({ message: "Location parameter is required" });
+      return res
+        .status(400)
+        .json({ message: "Location parameter is required" });
     }
 
     const usersCursor = await User.find({
@@ -133,7 +145,9 @@ app.get("/searchbylocation", async (req, res) => {
 
     const users = await usersCursor.toArray();
     if (users.length === 0) {
-      return res.status(404).json({ message: "No users found at the given location" });
+      return res
+        .status(404)
+        .json({ message: "No users found at the given location" });
     }
 
     res.json(users);
@@ -148,7 +162,9 @@ app.get("/searchbyuni", async (req, res) => {
   try {
     const { uni } = req.query;
     if (!uni) {
-      return res.status(400).json({ message: "University name parameter is required" });
+      return res
+        .status(400)
+        .json({ message: "University name parameter is required" });
     }
 
     const usersCursor = await User.find({
@@ -157,7 +173,9 @@ app.get("/searchbyuni", async (req, res) => {
 
     const users = await usersCursor.toArray();
     if (users.length === 0) {
-      return res.status(404).json({ message: "No users found for the given university name" });
+      return res
+        .status(404)
+        .json({ message: "No users found for the given university name" });
     }
 
     res.json(users);
@@ -172,7 +190,9 @@ app.get("/searchbyskill", async (req, res) => {
   try {
     const { skillname } = req.query;
     if (!skillname) {
-      return res.status(400).json({ message: "Skill name parameter is required" });
+      return res
+        .status(400)
+        .json({ message: "Skill name parameter is required" });
     }
 
     const skills = await Skill.find({
@@ -180,7 +200,9 @@ app.get("/searchbyskill", async (req, res) => {
     }).toArray();
 
     if (skills.length === 0) {
-      return res.status(404).json({ message: "No skills found with the given name" });
+      return res
+        .status(404)
+        .json({ message: "No skills found with the given name" });
     }
 
     res.json(skills);
@@ -201,20 +223,17 @@ app.get("/getskills", async (req, res) => {
   }
 });
 
-
 // Route to check if user is logged in
-app.get('/session', (req, res) => {
-  if (req.session && req.session.user) {
+app.get("/session", (req, res) => {
+  console.log(req.session); // This will help confirm if session is getting passed correctly
+  if (req.session.user) {
     res.json({ isAuthenticated: true, user: req.session.user });
   } else {
     res.json({ isAuthenticated: false });
   }
 });
 
-
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
-
-

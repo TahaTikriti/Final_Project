@@ -10,7 +10,7 @@ const Header = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/session") // Adjust the endpoint as necessary
+      .get("http://localhost:5000/session", { withCredentials: true }) // Adjust the endpoint as necessary
       .then((response) => {
         if (response.data.isAuthenticated) {
           setIsLoggedIn(true);
