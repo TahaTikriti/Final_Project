@@ -14,6 +14,7 @@ import RegisterForm from "./components/registerForm";
 import ProfilePage from "./components/profile_page";
 import Skills from "./components/skills";
 import Tutors from "./components/tutors";
+import Footer from "./components/footer";
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const AppContent = () => {
         <Route path="/topics" element={<Skills />} /> 
         <Route path="/tutors" element={<Tutors />} />
       </Routes>
+      <Footer />
     </>
   );
 };
