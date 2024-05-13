@@ -50,7 +50,7 @@ const Header = () => {
           </Button>
         ) : (
           <Button 
-          className="enabled:bg-background "
+          className="enabled:bg-background hover:bg-red-100 "
            onClick={() => handleNavigation("/login")}>Login</Button>
         )}
         <Navbar.Toggle />
