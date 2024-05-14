@@ -15,6 +15,9 @@ import ProfilePage from "./components/profile_page";
 import Skills from "./components/skills";
 import Tutors from "./components/tutors";
 import Footer from "./components/footer";
+import axios from "axios";
+axios.defaults.withCredentials = true;
+
 
 const App = () => {
   return (
