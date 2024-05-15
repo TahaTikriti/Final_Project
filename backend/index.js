@@ -230,15 +230,24 @@ app.get("/getskills", async (req, res) => {
 
 // Route to check if user is logged in
 app.get("/session", (req, res) => {
-  console.log(req.session); // This will help confirm if session is getting passed correctly
-  console.log(req.session.user);
+ 
   if (req.session.user) {
     res.json({ isAuthenticated: true, user: req.session.user });
   } else {
     res.json({ isAuthenticated: false });
   }
 });
-
+// Logout route
+app.get("/logout", (req, res) => {
+  req.session.destroy((error) => {
+    if (error) {
+      console.error("Error during logout:", error);
+      res.status(500).json({ message: "Server Error" });
+    } else {
+      res.json({ message: "Logout successful" });
+    }
+  });
+});
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
