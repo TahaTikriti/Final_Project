@@ -15,7 +15,7 @@ import ProfilePage from "./components/profile_page";
 import Skills from "./components/skills";
 import Tutors from "./components/tutors";
 import Footer from "./components/footer";
-
+import Team from "./components/team";
 const App = () => {
   return (
     <Router>
