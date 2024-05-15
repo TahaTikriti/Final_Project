@@ -15,7 +15,14 @@ import ProfilePage from "./components/profile_page";
 import Skills from "./components/skills";
 import Tutors from "./components/tutors";
 import Footer from "./components/footer";
+<<<<<<< HEAD
 import Team from "./components/team";
+=======
+import axios from "axios";
+axios.defaults.withCredentials = true;
+
+
+>>>>>>> 7c535714f1f62a6ab6bf528a9bcf2722f7962376
 const App = () => {
   return (
     <Router>

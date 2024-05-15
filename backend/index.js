@@ -11,7 +11,7 @@ const MongoStore = require("connect-mongo");
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:5000"], // Replace with your frontend's origin
+    origin: ["http://localhost:3000"], // Replace with your frontend's origin
     credentials: true, // Crucial for cookies to be sent with requests
   })
 );
@@ -32,9 +32,13 @@ app.use(
   session({
     secret: sessionSecret,
     resave: false,
-    saveUninitialized: false, // Don't save session until something is modified
+    saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
-    cookie: { secure: false, httpOnly: true, maxAge: 3600000 }, // 1 hour
+    cookie: {
+      secure: false, // Set to true if you're using https
+      httpOnly: true,
+      maxAge: 3600000, // 1 hour
+    },
   })
 );
 
@@ -96,8 +100,9 @@ app.post("/login", async (req, res) => {
 
     // Save user information in the session
     req.session.user = { id: user._id, email: EMAIL };
-    console.log("user" + JSON.stringify(req.session.user));
-    console.log(req.session);
+    req.session.save();
+    //console.log("user" + JSON.stringify(req.session.user));
+    //console.log(req.session);
     res.json({ message: "Login successful", sessionID: req.sessionID });
   } catch (error) {
     console.error(error);
@@ -226,6 +231,7 @@ app.get("/getskills", async (req, res) => {
 // Route to check if user is logged in
 app.get("/session", (req, res) => {
   console.log(req.session); // This will help confirm if session is getting passed correctly
+  console.log(req.session.user);
   if (req.session.user) {
     res.json({ isAuthenticated: true, user: req.session.user });
   } else {
