@@ -17,6 +17,7 @@ import Skills from "./components/skills";
 import Tutors from "./components/tutors";
 import Footer from "./components/footer";
 import axios from "axios";
+import Team from "./components/team";
 
 axios.defaults.withCredentials = true;
 

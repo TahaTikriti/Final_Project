@@ -1,12 +1,21 @@
 "use client";
 
 import { Footer as FlowbiteFooter } from "flowbite-react";
-import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter, BsEnvelope, BsPhone, BsMap } from "react-icons/bs";
+import {
+  BsDribbble,
+  BsFacebook,
+  BsGithub,
+  BsInstagram,
+  BsTwitter,
+  BsEnvelope,
+  BsPhone,
+  BsMap,
+} from "react-icons/bs";
 
 const Footer = () => {
   return (
     <FlowbiteFooter bgDark>
-      <div className="w-full">
+      <div className="w-full rounded-none">
         <div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-3">
           <div>
             <FlowbiteFooter.Title title="Company" />
@@ -21,16 +30,27 @@ const Footer = () => {
             <FlowbiteFooter.Title title="About Us" />
             <FlowbiteFooter.LinkGroup col>
               <FlowbiteFooter.Link href="#">Our Story</FlowbiteFooter.Link>
-              <FlowbiteFooter.Link href="#">Mission & Vision</FlowbiteFooter.Link>
+              <FlowbiteFooter.Link href="#">
+                Mission & Vision
+              </FlowbiteFooter.Link>
               <FlowbiteFooter.Link href="#">Team</FlowbiteFooter.Link>
             </FlowbiteFooter.LinkGroup>
           </div>
           <div>
             <FlowbiteFooter.Title title="Contact Us" />
             <FlowbiteFooter.LinkGroup col>
-              <FlowbiteFooter.Link href="#"><BsPhone className="inline mr-2" />Call us: 123-456-7890</FlowbiteFooter.Link>
-              <FlowbiteFooter.Link href="#"><BsEnvelope className="inline mr-2" />Mail us: info@example.com</FlowbiteFooter.Link>
-              <FlowbiteFooter.Link href="#"><BsMap className="inline mr-2" />Address: 1234 Example St, City, Country</FlowbiteFooter.Link>
+              <FlowbiteFooter.Link href="#">
+                <BsPhone className="inline mr-2" />
+                Call us: 123-456-7890
+              </FlowbiteFooter.Link>
+              <FlowbiteFooter.Link href="#">
+                <BsEnvelope className="inline mr-2" />
+                Mail us: info@example.com
+              </FlowbiteFooter.Link>
+              <FlowbiteFooter.Link href="#">
+                <BsMap className="inline mr-2" />
+                Address: 1234 Example St, City, Country
+              </FlowbiteFooter.Link>
             </FlowbiteFooter.LinkGroup>
           </div>
         </div>

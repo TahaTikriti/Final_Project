@@ -40,7 +40,7 @@ const Team = () => {
             </a>
             <div className="p-5">
               <h3 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <a href="#">Jese Leos</a>
+                <a href="#">Rabih kouzayha</a>
               </h3>
               <span className="text-gray-500 dark:text-gray-400">CTO</span>
               <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
@@ -63,7 +63,7 @@ const Team = () => {
             </a>
             <div className="p-5">
               <h3 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <a href="#">Michael Gough</a>
+                <a href="#">Taha tekriti</a>
               </h3>
               <span className="text-gray-500 dark:text-gray-400">Senior Front-end Developer</span>
               <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">

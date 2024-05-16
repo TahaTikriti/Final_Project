@@ -1,25 +1,54 @@
 import React, { useState, useEffect } from "react";
 import UserSkill from "./UserSkill";
+import axios from "axios";
 
 export default function ProfilePage() {
+  const [user, setUser] = useState(null);
   const [skills, setSkills] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch skills from the database
-    fetch("/skills") // Adjust the API endpoint as needed
-      .then((response) => response.json())
-      .then((data) => setSkills(data))
-      .catch((error) => console.error("Error fetching skills:", error));
+    const fetchUserData = async () => {
+      try {
+        // Check session and fetch user data
+        const sessionResponse = await axios.get(
+          "http://localhost:5000/session"
+        );
+        if (sessionResponse.data.isAuthenticated) {
+          const userId = sessionResponse.data.user.id;
+
+          // Fetch user details
+          const userDetails = await axios.get(
+            `http://localhost:5000/user/${userId}`
+          );
+          setUser(userDetails.data);
+
+          // Fetch user skills
+          const skillsResponse = await axios.get(
+            `http://localhost:5000/user_skills/${userId}`
+          );
+          setSkills(skillsResponse.data.skills); // Assuming the skills are in an array
+        } else {
+          alert("Not authenticated");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
   }, []);
 
-  const checkSession = () => {
-    const sessionToken = localStorage.getItem('sessionToken');
-    if (sessionToken) {
-      alert('You are in session');
-    } else {
-      alert('There is no session');
-    }
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div>User not found or not logged in</div>;
+  }
+
   return (
     <div className="w-full bg-gray-100 dark:bg-gray-900 py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
@@ -27,24 +56,17 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center gap-4">
             <div className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden">
               <img
-                src="https://avatar.iran.liara.run/public"
-                alt="@shadcn"
+                src="https://avatar.iran.liara.run/public" // Placeholder, should be user's actual avatar
+                alt="User Avatar"
                 className="object-cover h-full w-full"
               />
             </div>
             <div className="text-center">
-              <h1 className="text-2xl font-bold md:text-3xl flex items-center gap-2 text-white">
-                <UserIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
-                Jared Palmer
+              <h1 className="text-2xl font-bold md:text-3xl text-white">
+                {user.name}
               </h1>
-              <p className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                <BookIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
-                Computer Science
-              </p>
-              <p className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                <UniversityIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
-                University of California, Berkeley
-              </p>
+              <p className="text-gray-500 dark:text-gray-400">{user.email}</p>{" "}
+              // Example additional user info
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
               <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
@@ -57,42 +79,16 @@ export default function ProfilePage() {
           </div>
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-bold flex items-center gap-2 text-white">
-                <ActivityIcon className="h-6 w-6 text-blue-500 dark:text-blue-400" />
-                Skills
-              </h2>
+              <h2 className="text-xl font-bold text-white">Skills</h2>
               <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                 {skills.map((skill) => (
                   <UserSkill
-                    key={skill.id} // Assuming each skill has a unique id
+                    key={skill.id}
                     skillName={skill.name}
                     proficiency={skill.proficiency}
                     percentage={skill.percentage}
                   />
                 ))}
-              </div>
-            </div>
-            <div>
-              <h2 className="text-xl font-bold flex items-center gap-2">
-                <CalendarIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
-                Availability Schedule
-              </h2>
-              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-                <div className="space-y-1">
-                  <div className="text-sm font-medium">Monday</div>
-                  <div className="flex items-center gap-2">
-                    <ClockIcon className="h-4 w-4 fill-primary" />
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      9:00 AM - 12:00 PM
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <ClockIcon className="h-4 w-4 fill-primary" />
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      2:00 PM - 5:00 PM
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -101,6 +97,7 @@ export default function ProfilePage() {
     </div>
   );
 }
+
 // SVG icons remain unchanged, included in your component.
 
 function ActivityIcon(props) {

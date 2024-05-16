@@ -7,6 +7,9 @@ const crypto = require("crypto");
 const sessionSecret = process.env.SESSION_SECRET;
 const bcrypt = require("bcryptjs");
 const MongoStore = require("connect-mongo");
+const Schema = mongoose.Schema;
+
+
 
 const app = express();
 app.use(
@@ -24,6 +27,8 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 const User = mongoose.connection.collection("USER");
 const Skill = mongoose.connection.collection("SKILL");
+
+
 
 app.use(express.json());
 
