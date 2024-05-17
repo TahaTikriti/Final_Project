@@ -3,7 +3,6 @@ const flowbite = require("flowbite-react/tailwind");
 
 module.exports = {
   darkMode: "media",
-
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
     "node_modules/flowbite-react/lib/esm/**/*.js",
@@ -12,6 +11,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Allerta Stencil", "sans-serif"], // Set Allerta Stencil as default sans font
+      },
       colors: {
         primary: {
           50: "#e6f7ff",
@@ -31,5 +33,3 @@ module.exports = {
   },
   plugins: [require("flowbite/plugin"), flowbite.plugin()],
 };
-
-

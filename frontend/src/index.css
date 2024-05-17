@@ -1,3 +1,7 @@
+/* @font-face {
+  font-family: "Allerta Stencil";
+  src: url("/fonts/AllertaStencil.ttf") format("truetype");
+} */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
