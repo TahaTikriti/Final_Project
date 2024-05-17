@@ -56,7 +56,8 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center gap-4">
             <div className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden">
               <img
-                src="https://avatar.iran.liara.run/public" // Placeholder, should be user's actual avatar
+                // src="https://avatar.iran.liara.run/public" // Placeholder, should be user's actual avatar
+                src={user.PROFILE_PICTURE}
                 alt="User Avatar"
                 className="object-cover h-full w-full"
               />
@@ -65,8 +66,8 @@ export default function ProfilePage() {
               <h1 className="text-2xl font-bold md:text-3xl text-white">
                 {user.name}
               </h1>
-              <p className="text-gray-500 dark:text-gray-400">{user.email}</p>{" "}
-              // Example additional user info
+              <p className="text-gray-500 dark:text-gray-400">{user.EMAIL}</p>{" "}
+              <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
               <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">

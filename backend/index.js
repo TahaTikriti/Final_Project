@@ -233,6 +233,35 @@ app.get("/getskills", async (req, res) => {
   }
 });
 
+
+// Route to fetch user data by user ID
+app.get("/user/:userId", async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: new mongoose.Types.ObjectId(req.params.userId) });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// Route to fetch skills data by user ID
+app.get("/user_skills/:userId", async (req, res) => {
+  try {
+    const skills = await Skill.find({ userId: new mongoose.Types.ObjectId(req.params.userId) }).toArray();
+    if (!skills.length) {
+      return res.status(404).json({ message: "Skills not found for the user" });
+    }
+    res.json({ skills });
+  } catch (error) {
+    console.error("Error fetching user skills:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 // Route to check if user is logged in
 app.get("/session", (req, res) => {
  
