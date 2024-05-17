@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../images/logo-color.png";
+import { Link } from 'react-router-dom';
 const HeroSection = () => {
     return (
       <section class="bg-white dark:bg-gray-900">
@@ -31,12 +32,12 @@ const HeroSection = () => {
                 ></path>
               </svg>
             </a>
-            <a
-              href="#"
-              class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-            >
-              Browase Tutors
-            </a>
+            <Link
+  to="/tutors" // Make sure this path matches the route defined in your Router setup
+  className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+>
+  Browse Tutors
+</Link>
           </div>
           <div class="hidden lg:mt-0 lg:col-span-5 lg:flex rounded-lg">
             <img

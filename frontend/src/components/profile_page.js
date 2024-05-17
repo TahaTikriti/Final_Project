@@ -42,8 +42,28 @@ export default function ProfilePage() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div style={{
+          border: '4px solid rgba(255, 255, 255, 0.3)', // Light grey border
+          borderTop: '4px solid #3498db', // Blue border
+          borderRadius: '50%',
+          width: '40px',
+          height: '40px',
+          animation: 'spin 2s linear infinite'
+        }} />
+      </div>
+    );
   }
+  
+  // You'll need to include the @keyframes rule in your global CSS since it cannot be inlined:
+  /*
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  */
+  
 
   if (!user) {
     return <div>User not found or not logged in</div>;
@@ -82,12 +102,11 @@ export default function ProfilePage() {
             <div>
               <h2 className="text-xl font-bold text-white">Skills</h2>
               <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                {skills.map((skill) => (
+                {user.SKILLS.map((skill) => (
                   <UserSkill
                     key={skill.id}
-                    skillName={skill.name}
+                    skillName={skill.skill_name}
                     proficiency={skill.proficiency}
-                    percentage={skill.percentage}
                   />
                 ))}
               </div>
