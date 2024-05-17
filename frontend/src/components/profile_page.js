@@ -82,12 +82,11 @@ export default function ProfilePage() {
             <div>
               <h2 className="text-xl font-bold text-white">Skills</h2>
               <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                {skills.map((skill) => (
+                {user.SKILLS.map((skill) => (
                   <UserSkill
                     key={skill.id}
-                    skillName={skill.name}
+                    skillName={skill.skill_name}
                     proficiency={skill.proficiency}
-                    percentage={skill.percentage}
                   />
                 ))}
               </div>

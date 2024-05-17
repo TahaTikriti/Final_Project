@@ -27,6 +27,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 const User = mongoose.connection.collection("USER");
 const Skill = mongoose.connection.collection("SKILL");
+const UserSkill = mongoose.connection.collection("USER_Skill");
 
 
 
@@ -34,7 +35,7 @@ app.use(express.json());
 
 // Configure express-session middleware
 app.use(
-  session({
+  session({ 
     secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
@@ -242,7 +243,7 @@ app.get("/user/:userId", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     res.json(user);
-  } catch (error) {
+  } catch (error) { 
     console.error("Error fetching user data:", error);
     res.status(500).json({ message: "Server Error" });
   }

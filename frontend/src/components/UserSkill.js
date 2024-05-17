@@ -1,6 +1,22 @@
 import React from "react";
+const UserSkill = ({ skillName, proficiency }) => {
+  const getProficiencyPercentage = (proficiency) => {
+    switch (proficiency.toLowerCase()) {
+      case 'beginner':
+        return 25;
+      case 'intermediate':
+        return 50;
+      case 'advanced':
+        return 75;
+      case 'expert':
+        return 100;
+      default:
+        return 0;  // Default case for unexpected proficiency labels
+    }
+  };
 
-const UserSkill = ({ skillName, proficiency, percentage }) => {
+  const percentage = getProficiencyPercentage(proficiency);
+
   return (
     <div className="space-y-1">
       <div className="text-sm font-medium flex items-center gap-2">
@@ -10,17 +26,18 @@ const UserSkill = ({ skillName, proficiency, percentage }) => {
       <div className="flex items-center gap-2">
         <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2.5">
           <div
-            className="bg-primary h-2.5 rounded-full"
+            className="bg-green-500 h-2.5 rounded-full"
             style={{ width: `${percentage}%` }}
           ></div>
         </div>
         <span className="text-xs text-gray-500 dark:text-gray-400">
-          {proficiency}
+          {proficiency} 
         </span>
       </div>
     </div>
   );
 };
+
 
 export default UserSkill;
 function CodeIcon(props) {
