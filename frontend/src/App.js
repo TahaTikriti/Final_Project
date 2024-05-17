@@ -40,7 +40,18 @@ const ProtectedRoute = ({ component: Component }) => {
   }, []);
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>; // or some other loading state if desired
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div style={{
+          border: '4px solid rgba(255, 255, 255, 0.3)', // Light grey border
+          borderTop: '4px solid #3498db', // Blue border
+          borderRadius: '50%',
+          width: '40px',
+          height: '40px',
+          animation: 'spin 2s linear infinite'
+        }} />
+      </div>
+    ); // or some other loading state if desired
   }
 
   return isAuthenticated ? (
