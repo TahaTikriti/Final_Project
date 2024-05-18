@@ -53,13 +53,7 @@ export default function ProfilePage() {
     );
   }
 
-  // You'll need to include the @keyframes rule in your global CSS since it cannot be inlined:
-  /*
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  */
+ 
 
   if (!user) {
     return <div>User not found or not logged in</div>;
