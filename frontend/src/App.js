@@ -16,9 +16,9 @@ import ProfilePage from "./components/profile_page";
 import Skills from "./components/skills";
 import Tutors from "./components/tutors";
 import Footer from "./components/footer";
-import axios from "axios";
 import Team from "./components/team";
-
+import EditProfile from "./components/editProfile";
+import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const ProtectedRoute = ({ component: Component }) => {
@@ -43,8 +43,8 @@ const ProtectedRoute = ({ component: Component }) => {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div style={{
-          border: '4px solid rgba(255, 255, 255, 0.3)', // Light grey border
-          borderTop: '4px solid #3498db', // Blue border
+          border: '4px solid rgba(255, 255, 255, 0.3)',
+          borderTop: '4px solid #3498db',
           borderRadius: '50%',
           width: '40px',
           height: '40px',
@@ -74,7 +74,8 @@ const AppContent = () => {
   const showHeader =
     location.pathname === "/" ||
     location.pathname === "/profile" ||
-    location.pathname === "/topics";
+    location.pathname === "/topics" ||
+    location.pathname === "/edit-profile";
 
   return (
     <>

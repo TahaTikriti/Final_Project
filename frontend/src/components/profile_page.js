@@ -1,33 +1,24 @@
 import React, { useState, useEffect } from "react";
-import UserSkill from "./UserSkill";
 import axios from "axios";
+import UserSkill from "./UserSkill";
+import EditProfile from "./editProfile";
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);  // To toggle edit form
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // Check session and fetch user data
-        const sessionResponse = await axios.get(
-          "http://localhost:5000/session"
-        );
+        const sessionResponse = await axios.get("http://localhost:5000/session");
         if (sessionResponse.data.isAuthenticated) {
           const userId = sessionResponse.data.user.id;
-
-          // Fetch user details
-          const userDetails = await axios.get(
-            `http://localhost:5000/user/${userId}`
-          );
+          const userDetails = await axios.get(`http://localhost:5000/user/${userId}`);
           setUser(userDetails.data);
-
-          // Fetch user skills
-          const skillsResponse = await axios.get(
-            `http://localhost:5000/user_skills/${userId}`
-          );
-          setSkills(skillsResponse.data.skills); // Assuming the skills are in an array
+          const skillsResponse = await axios.get(`http://localhost:5000/user_skills/${userId}`);
+          setSkills(skillsResponse.data.skills);
         } else {
           alert("Not authenticated");
         }
@@ -41,12 +32,16 @@ export default function ProfilePage() {
     fetchUserData();
   }, []);
 
+  const handleEditToggle = () => {
+    setEditMode(!editMode);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div style={{
-          border: '4px solid rgba(255, 255, 255, 0.3)', // Light grey border
-          borderTop: '4px solid #3498db', // Blue border
+          border: '4px solid rgba(255, 255, 255, 0.3)',
+          borderTop: '4px solid #3498db',
           borderRadius: '50%',
           width: '40px',
           height: '40px',
@@ -55,15 +50,6 @@ export default function ProfilePage() {
       </div>
     );
   }
-  
-  // You'll need to include the @keyframes rule in your global CSS since it cannot be inlined:
-  /*
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  */
-  
 
   if (!user) {
     return <div>User not found or not logged in</div>;
@@ -76,7 +62,6 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center gap-4">
             <div className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden">
               <img
-                // src="https://avatar.iran.liara.run/public" // Placeholder, should be user's actual avatar
                 src={user.PROFILE_PICTURE}
                 alt="User Avatar"
                 className="object-cover h-full w-full"
@@ -86,30 +71,29 @@ export default function ProfilePage() {
               <h1 className="text-2xl font-bold md:text-3xl text-white">
                 {user.name}
               </h1>
-              <p className="text-gray-500 dark:text-gray-400">{user.EMAIL}</p>{" "}
+              <p className="text-gray-500 dark:text-gray-400">{user.EMAIL}</p>
               <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
               <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                 Contact
               </button>
-              <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100">
+              <button onClick={handleEditToggle} className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100">
                 Edit Profile
               </button>
             </div>
           </div>
+          {editMode && <EditProfile user={user} closeEdit={handleEditToggle} />}
           <div className="space-y-6">
-            <div>
-              <h2 className="text-xl font-bold text-white">Skills</h2>
-              <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                {user.SKILLS.map((skill) => (
-                  <UserSkill
-                    key={skill.id}
-                    skillName={skill.skill_name}
-                    proficiency={skill.proficiency}
-                  />
-                ))}
-              </div>
+            <h2 className="text-xl font-bold text-white">Skills</h2>
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+              {user.SKILLS.map((skill) => (
+                <UserSkill
+                  key={skill.id}
+                  skillName={skill.skill_name}
+                  proficiency={skill.proficiency}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -117,6 +101,8 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+
 
 // SVG icons remain unchanged, included in your component.
 
