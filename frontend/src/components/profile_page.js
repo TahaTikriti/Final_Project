@@ -39,19 +39,6 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-<<<<<<< HEAD
-        <div style={{
-          border: '4px solid rgba(255, 255, 255, 0.3)',
-          borderTop: '4px solid #3498db',
-          borderRadius: '50%',
-          width: '40px',
-          height: '40px',
-          animation: 'spin 2s linear infinite'
-        }} />
-      </div>
-    );
-  }
-=======
         <div
           style={{
             border: "4px solid rgba(255, 255, 255, 0.3)", // Light grey border
@@ -73,7 +60,6 @@ export default function ProfilePage() {
     100% { transform: rotate(360deg); }
   }
   */
->>>>>>> aa6a629535dd32d45e850c4528c63bf625ce0b8d
 
   if (!user) {
     return <div>User not found or not logged in</div>;
@@ -96,10 +82,6 @@ export default function ProfilePage() {
                 <UserIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
                 {user.name}
               </h1>
-<<<<<<< HEAD
-              <p className="text-gray-500 dark:text-gray-400">{user.EMAIL}</p>
-              <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>
-=======
               <p className="text-gray-500 dark:text-gray-400">
                 <BookIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
                 {user.UNIVERSITY_NAME}
@@ -109,7 +91,6 @@ export default function ProfilePage() {
                 {user.LOCATION}
               </p>
               <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>{" "}
->>>>>>> aa6a629535dd32d45e850c4528c63bf625ce0b8d
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
               <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
@@ -122,17 +103,6 @@ export default function ProfilePage() {
           </div>
           {editMode && <EditProfile user={user} closeEdit={handleEditToggle} />}
           <div className="space-y-6">
-<<<<<<< HEAD
-            <h2 className="text-xl font-bold text-white">Skills</h2>
-            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-              {user.SKILLS.map((skill) => (
-                <UserSkill
-                  key={skill.id}
-                  skillName={skill.skill_name}
-                  proficiency={skill.proficiency}
-                />
-              ))}
-=======
             <div>
               <h2 className="text-xl font-bold text-white">
                 <ActivityIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
@@ -147,7 +117,6 @@ export default function ProfilePage() {
                   />
                 ))}
               </div>
->>>>>>> aa6a629535dd32d45e850c4528c63bf625ce0b8d
             </div>
           </div>
         </div>
