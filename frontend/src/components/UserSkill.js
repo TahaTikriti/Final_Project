@@ -19,8 +19,8 @@ const UserSkill = ({ skillName, proficiency }) => {
 
   return (
     <div className="space-y-1">
-      <div className="text-sm font-medium flex items-center gap-2">
-        <CodeIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+      <div className="text-sm font-medium flex items-center gap-2 text-white">
+        <CodeIcon className="h-4 w-4 text-gray-500 dark:text-gray-200" />
         {skillName}
       </div>
       <div className="flex items-center gap-2">

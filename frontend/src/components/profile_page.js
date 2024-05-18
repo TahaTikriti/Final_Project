@@ -39,6 +39,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
+<<<<<<< HEAD
         <div style={{
           border: '4px solid rgba(255, 255, 255, 0.3)',
           borderTop: '4px solid #3498db',
@@ -50,6 +51,29 @@ export default function ProfilePage() {
       </div>
     );
   }
+=======
+        <div
+          style={{
+            border: "4px solid rgba(255, 255, 255, 0.3)", // Light grey border
+            borderTop: "4px solid #3498db", // Blue border
+            borderRadius: "50%",
+            width: "40px",
+            height: "40px",
+            animation: "spin 2s linear infinite",
+          }}
+        />
+      </div>
+    );
+  }
+
+  // You'll need to include the @keyframes rule in your global CSS since it cannot be inlined:
+  /*
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  */
+>>>>>>> aa6a629535dd32d45e850c4528c63bf625ce0b8d
 
   if (!user) {
     return <div>User not found or not logged in</div>;
@@ -69,10 +93,23 @@ export default function ProfilePage() {
             </div>
             <div className="text-center">
               <h1 className="text-2xl font-bold md:text-3xl text-white">
+                <UserIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
                 {user.name}
               </h1>
+<<<<<<< HEAD
               <p className="text-gray-500 dark:text-gray-400">{user.EMAIL}</p>
               <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>
+=======
+              <p className="text-gray-500 dark:text-gray-400">
+                <BookIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
+                {user.UNIVERSITY_NAME}
+              </p>
+              <p className="text-gray-500 dark:text-gray-400">
+                <LocationPinIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
+                {user.LOCATION}
+              </p>
+              <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>{" "}
+>>>>>>> aa6a629535dd32d45e850c4528c63bf625ce0b8d
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
               <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
@@ -85,6 +122,7 @@ export default function ProfilePage() {
           </div>
           {editMode && <EditProfile user={user} closeEdit={handleEditToggle} />}
           <div className="space-y-6">
+<<<<<<< HEAD
             <h2 className="text-xl font-bold text-white">Skills</h2>
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
               {user.SKILLS.map((skill) => (
@@ -94,6 +132,22 @@ export default function ProfilePage() {
                   proficiency={skill.proficiency}
                 />
               ))}
+=======
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                <ActivityIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
+                Skills
+              </h2>
+              <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                {user.SKILLS.map((skill) => (
+                  <UserSkill
+                    key={skill.id}
+                    skillName={skill.skill_name}
+                    proficiency={skill.proficiency}
+                  />
+                ))}
+              </div>
+>>>>>>> aa6a629535dd32d45e850c4528c63bf625ce0b8d
             </div>
           </div>
         </div>
@@ -121,6 +175,24 @@ function ActivityIcon(props) {
       strokeLinejoin="round"
     >
       <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
+    </svg>
+  );
+}
+function LocationPinIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
     </svg>
   );
 }

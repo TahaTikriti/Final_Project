@@ -58,7 +58,7 @@ export default function Tutors() {
 
   return (
     <>
-      <Header />
+     
       <main className="bg-gray-100 dark:bg-gray-900 py-12 md:py-16">
         <div className="container mx-auto px-4 md:px-6">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-8">Our Experienced Tutors</h1>
