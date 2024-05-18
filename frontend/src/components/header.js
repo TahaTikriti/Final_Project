@@ -25,7 +25,7 @@ const Header = () => {
   };
 
   return (
-    <Navbar fluid className="lg:px-20 lg:pt-4 dark:bg-gray-900 opacity-95">
+    <Navbar fluid className="lg:px-20 lg:pt-4 dark:bg-gray-800">
       <Navbar.Brand className="lg:ml-14" href="" onClick={() => handleNavigation("/")}>
         <img src={logo} className="mr-3 h-6 sm:h-9" alt="Tutorium Logo" />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">

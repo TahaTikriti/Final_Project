@@ -74,6 +74,7 @@ const AppContent = () => {
   const showHeader =
     location.pathname === "/" ||
     location.pathname === "/profile" ||
+    location.pathname === "/tutors" ||
     location.pathname === "/topics";
 
   return (

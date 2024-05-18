@@ -2,6 +2,9 @@
   font-family: "Allerta Stencil";
   src: url("/fonts/AllertaStencil.ttf") format("truetype");
 } */
+body{
+  background: #102031;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
