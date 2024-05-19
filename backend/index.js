@@ -157,7 +157,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "52130469@students.liu.edu.lb", // Use environment variables in production
-    pass: process.env.OTP_EMAIL_PASSWORD, // Use environment variables in production
+    pass: process.env.OTP_EMAIL_PASS, // Use environment variables in production
   },
 }); 
 

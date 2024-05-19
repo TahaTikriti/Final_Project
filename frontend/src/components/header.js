@@ -49,8 +49,7 @@ const Header = () => {
             Logout
           </Button>
         ) : (
-          <Button 
-          className="enabled:bg-background  "
+          <Button className="bg-primary-500 hover:bg-primary-600 dark:bg-primary-700 dark:hover:bg-primary-800"
            onClick={() => handleNavigation("/login")}>Login</Button>
         )}
         <Navbar.Toggle />
