@@ -2,24 +2,28 @@ import React, { useState } from 'react';
 
 function EditProfile({ closeEdit }) {
     const [formData, setFormData] = useState({
-        profilePicture: '',
+        profilePicture: null,
         bio: '',
         location: '',
         skills: [{ skillName: '', skillProficiency: '' }]
     });
 
     const handleChange = (e) => {
-        if (e.target.name.startsWith('skillName') || e.target.name.startsWith('skillProficiency')) {
-            const index = parseInt(e.target.dataset.index);
+        const { name, value } = e.target;
+        if (name === 'profilePicture') {
+            setFormData({ ...formData, profilePicture: e.target.files[0] });
+        } else if (name.startsWith('skillName') || name.startsWith('skillProficiency')) {
+            const index = parseInt(name.split('-')[1], 10);
+            const field = name.split('-')[0]; // 'skillName' or 'skillProficiency'
             const updatedSkills = formData.skills.map((skill, i) => {
                 if (i === index) {
-                    return { ...skill, [e.target.name.split('-')[1]]: e.target.value };
+                    return { ...skill, [field]: value };
                 }
                 return skill;
             });
             setFormData({ ...formData, skills: updatedSkills });
         } else {
-            setFormData({ ...formData, [e.target.name]: e.target.value });
+            setFormData({ ...formData, [name]: value });
         }
     };
 
@@ -54,8 +58,8 @@ function EditProfile({ closeEdit }) {
                     </div>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="sm:col-span-2">
-                            <label htmlFor="profilePicture" className="block mb-2 text-sm font-medium text-gray-900 dark:text:white">Profile Picture URL</label>
-                            <input type="url" name="profilePicture" id="profilePicture" value={formData.profilePicture} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text:white" placeholder="Enter profile picture URL" required />
+                            <label htmlFor="profilePicture" className="block mb-2 text-sm font-medium text-gray-900 dark:text:white">Profile Picture</label>
+                            <input type="file" name="profilePicture" id="profilePicture" onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text:white" accept="image/*" />
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="bio" className="block mb-2 text-sm font-medium text-gray-900 dark:text:white">Bio</label>
@@ -85,8 +89,7 @@ function EditProfile({ closeEdit }) {
                                 >
                                     <option value="">Select proficiency</option>
                                     <option value="Beginner">Beginner</option>
-                                    <option value="Intermediate">Intermediate</option
->
+                                    <option value="Intermediate">Intermediate</option>
                                     <option value="Advanced">Advanced</option>
                                     <option value="Expert">Expert</option>
                                 </select>
@@ -110,7 +113,8 @@ function EditProfile({ closeEdit }) {
                         <div className="flex justify-end gap-4">
                             <button type="submit" className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center">
                                 Save Changes
-                            </button>
+                            </button
+>
                             <button type="button" className="bg-gray-500 hover:bg-gray-600 text-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg text-sm px-5 py-2.5 inline-flex items-center" onClick={closeEdit}>
                                 Close
                             </button>
