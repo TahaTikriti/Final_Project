@@ -113,9 +113,7 @@ app.post("/login", async (req, res) => {
     }
 
     // Generate a 4-digit OTP
-    const otp = Math.floor(Math.random() * 10000)
-      .toString()
-      .padStart(4, "0");
+    const otp = generateOtp();
     await User.updateOne({ _id: user._id }, { $set: { otp } }); // Update OTP in user's document
     await sendOtpEmail(EMAIL, otp); // Send the OTP via email
 
@@ -159,14 +157,14 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "52130469@students.liu.edu.lb", // Use environment variables in production
-    pass: "id52130469",
+    pass: process.env.OTP_EMAIL_PASSWORD, // Use environment variables in production
   },
 }); 
 
 // Helper function to send OTP
 const sendOtpEmail = async (email, otp) => {
   const mailOptions = {
-    from: "tutorium961@gmail.com",
+    from: "52130469@students.liu.edu.lb",
     to: email,
     subject: "Verify Your Account",
     text: `Your OTP for account verification is: ${otp}`,
