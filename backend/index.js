@@ -402,6 +402,54 @@ app.get("/logout", (req, res) => {
     }
   });
 });
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads'); // ensure this directory is existent or handled dynamically
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
+
+// Update profile route
+// Assuming you are using Express and Mongoose
+app.post("/update-profile", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const userId = req.session.user.id; // Assuming this is how you store user IDs in the session
+  const { BIO, LOCATION, skills } = req.body;
+
+  let updates = {};
+
+  // Check each field explicitly to ensure it's not undefined, null, or an empty string
+  if (typeof BIO === 'string' && BIO.trim() !== '') updates.BIO = BIO;
+  if (typeof LOCATION === 'string' && LOCATION.trim() !== '') updates.LOCATION = LOCATION;
+  
+  if (Array.isArray(skills)) {
+    // Filter out any skills that do not have both name and proficiency provided
+    const filteredSkills = skills.filter(skill => skill.skillName && skill.skillProficiency);
+    if (filteredSkills.length > 0) updates.skills = filteredSkills;
+  }
+
+  if (Object.keys(updates).length === 0) {
+    return res.status(400).json({ message: "No valid update fields provided" });
+  }
+
+  try {
+    await User.updateOne({ _id: new mongoose.Types.ObjectId(userId) }, { $set: updates });
+    res.json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
+
+
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
