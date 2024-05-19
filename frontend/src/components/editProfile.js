@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 function EditProfile({ closeEdit }) {
     const [formData, setFormData] = useState({
         profilePicture: null,
@@ -41,11 +41,32 @@ function EditProfile({ closeEdit }) {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form data submitted:', formData);
-        closeEdit();  // Optionally close the edit form upon successful submission
+        const updatedData = {
+            BIO: formData.bio,
+            LOCATION: formData.location,
+            skills: formData.skills.filter(skill => skill.skillName && skill.skillProficiency)
+        };
+    
+        console.log('Sending data:', updatedData);
+    
+        try {
+            const response = await axios.post('http://localhost:5000/update-profile', updatedData, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log('Update successful:', response.data);
+            alert('Profile updated successfully!');
+            closeEdit();
+        } catch (error) {
+            console.error('Error updating profile:', error.response ? error.response.data : error);
+            alert('Failed to update profile. ' + (error.response ? error.response.data.message : 'No error data'));
+        }
     };
+    
+    
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
@@ -67,7 +88,7 @@ function EditProfile({ closeEdit }) {
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text:white">Location</label>
-                            <input type="text" name="location" id="location" value={formData.location} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text:white" placeholder="Enter your location" required />
+                            <input type="text" name="location" id="location" value={formData.location} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text:white" placeholder="Enter your location" />
                         </div>
                         {formData.skills.map((skill, index) => (
                             <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
@@ -113,8 +134,7 @@ function EditProfile({ closeEdit }) {
                         <div className="flex justify-end gap-4">
                             <button type="submit" className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center">
                                 Save Changes
-                            </button
->
+                            </button>
                             <button type="button" className="bg-gray-500 hover:bg-gray-600 text-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg text-sm px-5 py-2.5 inline-flex items-center" onClick={closeEdit}>
                                 Close
                             </button>
