@@ -8,6 +8,7 @@ const RegisterForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [university, setUniversity] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false); // Track whether OTP has been sent
@@ -26,7 +27,8 @@ const RegisterForm = () => {
         EMAIL: email,
         PASSWORD: password,
         FULL_NAME: fullName,
-        UNIVERSITY_NAME: university
+        UNIVERSITY_NAME: university,
+        PHONE_NUMBER: phoneNumber
       });
       setOtpSent(true); // Indicate that OTP has been sent
       setError(""); // Clear any existing errors
@@ -148,6 +150,24 @@ const RegisterForm = () => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       required
                       placeholder="Your full name"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="phone-number"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone-number"
+                      id="phone-number"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                      placeholder="Your phone number"
                     />
                   </div>
                   <div>

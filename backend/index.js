@@ -179,13 +179,15 @@ const sendOtpEmail = async (email, otp) => {
 };
 
 app.post("/register", async (req, res) => {
-  const { EMAIL, PASSWORD, FULL_NAME, UNIVERSITY_NAME } = req.body;
+  const { EMAIL, PASSWORD, FULL_NAME, UNIVERSITY_NAME, PHONE_NUMBER } = req.body;
 
-  if (!EMAIL || !PASSWORD || !FULL_NAME || !UNIVERSITY_NAME) {
+  // Check if all required fields are present
+  if (!EMAIL || !PASSWORD || !FULL_NAME || !UNIVERSITY_NAME || !PHONE_NUMBER) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
+    // Check if the user already exists
     const existingUser = await User.findOne({ EMAIL });
     if (existingUser) {
       return res
@@ -193,27 +195,35 @@ app.post("/register", async (req, res) => {
         .json({ message: "User already exists with this email" });
     }
 
-    const otp = generateOtp(); // Generate a 4-digit OTP as a string
+    // Generate a one-time password (OTP)
+    const otp = generateOtp(); // Assuming generateOtp() is defined to generate a 4-digit OTP as a string
+
+    // Create new user object including phone number
     const newUser = {
       EMAIL,
       PASSWORD,
       FULL_NAME,
       UNIVERSITY_NAME,
+      PHONE_NUMBER, // Add phone number to the new user object
       otp,
       verified: false
     };
 
+    // Insert the new user into the database
     await User.insertOne(newUser); // Assuming User is a direct MongoDB collection access
-    await sendOtpEmail(EMAIL, otp); // Send OTP email
 
-    res
-      .status(201)
-      .json({ message: "Registration successful, verify your email" });
+    // Send OTP to user's email
+    await sendOtpEmail(EMAIL, otp); // Assuming sendOtpEmail() is defined to send emails
+
+    // Respond with success message
+    res.status(201).json({ message: "Registration successful, verify your email" });
   } catch (error) {
+    // Log and respond with error if something goes wrong
     console.error("Error during registration:", error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 });
+
 
 
 
@@ -420,33 +430,46 @@ app.post("/update-profile", async (req, res) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  console.log(req.body);
   const userId = req.session.user.id; // Assuming this is how you store user IDs in the session
   const { BIO, LOCATION, skills } = req.body;
 
-  let updates = {};
+  let updates = { $set: {}, $push: {} };
 
   // Check each field explicitly to ensure it's not undefined, null, or an empty string
-  if (typeof BIO === 'string' && BIO.trim() !== '') updates.BIO = BIO;
-  if (typeof LOCATION === 'string' && LOCATION.trim() !== '') updates.LOCATION = LOCATION;
+  if (typeof BIO === 'string' && BIO.trim() !== '') updates.$set.BIO = BIO;
+  if (typeof LOCATION === 'string' && LOCATION.trim() !== '') updates.$set.LOCATION = LOCATION;
   
   if (Array.isArray(skills)) {
     // Filter out any skills that do not have both name and proficiency provided
     const filteredSkills = skills.filter(skill => skill.skillName && skill.skillProficiency);
-    if (filteredSkills.length > 0) updates.skills = filteredSkills;
+    if (filteredSkills.length > 0) {
+      updates.$push.SKILLS = { 
+        $each: filteredSkills.map(skill => ({ skill_name: skill.skillName, proficiency: skill.skillProficiency }))
+      };
+    }
   }
 
+  // Remove empty $set or $push objects to avoid sending an empty update
+  if (Object.keys(updates.$set).length === 0) delete updates.$set;
+  if (Object.keys(updates.$push).length === 0) delete updates.$push;
+
+  // Ensure there's something to update
   if (Object.keys(updates).length === 0) {
     return res.status(400).json({ message: "No valid update fields provided" });
   }
 
   try {
-    await User.updateOne({ _id: new mongoose.Types.ObjectId(userId) }, { $set: updates });
+    // Execute the update operation with proper atomic operators
+    await User.updateOne({ _id: new mongoose.Types.ObjectId(userId) }, updates);
     res.json({ message: "Profile updated successfully" });
   } catch (error) {
     console.error("Error updating profile:", error);
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 });
+
+
 
 
 
