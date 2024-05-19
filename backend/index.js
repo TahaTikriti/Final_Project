@@ -108,6 +108,13 @@ app.post("/login", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Check if the user's email has been verified
+    if (!user.verified) {
+      return res
+        .status(403)
+        .json({ message: "Please verify your email address first" });
+    }
+
     if (PASSWORD !== user.PASSWORD) {
       return res.status(401).json({ message: "Incorrect password" });
     }
@@ -125,6 +132,7 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
+
 
 
 app.post("/verify-login-otp", async (req, res) => {
