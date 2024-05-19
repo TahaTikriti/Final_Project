@@ -59,7 +59,7 @@ const RegisterForm = () => {
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="flex flex-col items-center justify-center px-6 py-6 mx-auto md:h-screen lg:py-0">
         <a
           href="#"
           className="flex items-center space-x-3 rtl:space-x-reverse mb-2"
@@ -77,7 +77,7 @@ const RegisterForm = () => {
                   Create an account
                 </h1>
                 <form
-                  className="space-y-4 md:space-y-6"
+                  className="space-y-4 md:space-y-4"
                   onSubmit={handleRegistration}
                 >
                   <div>
