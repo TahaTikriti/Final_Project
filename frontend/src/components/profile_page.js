@@ -81,7 +81,7 @@ export default function ProfilePage() {
             <div className="text-center">
               <h1 className="text-2xl font-bold md:text-3xl text-white">
                 <UserIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
-                {user.name}
+                {user.FULL_NAME}
               </h1>
               <p className="text-gray-500 dark:text-gray-400">
                 <BookIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}

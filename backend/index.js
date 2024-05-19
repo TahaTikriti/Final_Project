@@ -179,9 +179,10 @@ const sendOtpEmail = async (email, otp) => {
 };
 
 app.post("/register", async (req, res) => {
-  const { EMAIL, PASSWORD } = req.body;
-  if (!EMAIL || !PASSWORD) {
-    return res.status(400).json({ message: "Email and password are required" });
+  const { EMAIL, PASSWORD, FULL_NAME, UNIVERSITY_NAME } = req.body;
+
+  if (!EMAIL || !PASSWORD || !FULL_NAME || !UNIVERSITY_NAME) {
+    return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
@@ -193,7 +194,15 @@ app.post("/register", async (req, res) => {
     }
 
     const otp = generateOtp(); // Generate a 4-digit OTP as a string
-    const newUser = { EMAIL, PASSWORD, otp, verified: false };
+    const newUser = {
+      EMAIL,
+      PASSWORD,
+      FULL_NAME,
+      UNIVERSITY_NAME,
+      otp,
+      verified: false
+    };
+
     await User.insertOne(newUser); // Assuming User is a direct MongoDB collection access
     await sendOtpEmail(EMAIL, otp); // Send OTP email
 
@@ -205,6 +214,7 @@ app.post("/register", async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
+
 
 
 app.post("/verify-otp", async (req, res) => {

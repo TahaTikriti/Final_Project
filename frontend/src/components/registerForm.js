@@ -7,6 +7,8 @@ const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [university, setUniversity] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false); // Track whether OTP has been sent
   const [error, setError] = useState("");
@@ -23,6 +25,8 @@ const RegisterForm = () => {
       const response = await axios.post("http://localhost:5000/register", {
         EMAIL: email,
         PASSWORD: password,
+        FULL_NAME: fullName,
+        UNIVERSITY_NAME: university
       });
       setOtpSent(true); // Indicate that OTP has been sent
       setError(""); // Clear any existing errors
@@ -126,6 +130,42 @@ const RegisterForm = () => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       required
                       placeholder="••••••••"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="full-name"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Full name
+                    </label>
+                    <input
+                      type="text"
+                      name="full-name"
+                      id="full-name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                      placeholder="Your full name"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="university"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      University
+                    </label>
+                    <input
+                      type="text"
+                      name="university"
+                      id="university"
+                      value={university}
+                      onChange={(e) => setUniversity(e.target.value)}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                      placeholder="Your university"
                     />
                   </div>
                   {error && <p className="text-sm text-red-500">{error}</p>}
