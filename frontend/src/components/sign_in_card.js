@@ -6,19 +6,20 @@ import logo from "../images/tutorium-favicon-color.png";
 const SignInCard = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false); // To track if OTP has been sent and the form should now accept OTP
   const [localError, setLocalError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const handleLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/login", {
+      await axios.post("http://localhost:5000/login", {
         EMAIL: email,
         PASSWORD: password,
       });
-
-      alert("Login successful!");
-      navigate("/"); // Redirect to home after successful login
+      setOtpSent(true); // After successful initial login, prompt for OTP
+      setLocalError("");
     } catch (error) {
       const errorMsg = error.response
         ? error.response.data.message
@@ -27,9 +28,27 @@ const SignInCard = () => {
     }
   };
 
-  const handleSignUp = () => {
-    navigate("/register"); // Redirect to the Register component
+  const handleOtpSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/verify-login-otp",
+        {
+          EMAIL: email,
+          otp,
+        }
+      );
+      alert("Login successful!");
+      navigate("/"); // Redirect to home after successful OTP verification
+    } catch (error) {
+      const errorMsg = error.response
+        ? error.response.data.message
+        : error.message;
+      setLocalError("Failed to verify OTP: " + errorMsg);
+    }
   };
+  const handleSignUp = () => {  
+    navigate("/register"); };
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -38,7 +57,7 @@ const SignInCard = () => {
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            navigate("/"); // Home link should also be handled properly
+            navigate("/");
           }}
           className="flex items-center space-x-3 rtl:space-x-reverse mb-2"
         >
@@ -50,45 +69,71 @@ const SignInCard = () => {
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Sign in to your account
+              {otpSent ? "Verify OTP" : "Sign in to your account"}
             </h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Your email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="name@company.com"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
-                  placeholder="••••••••"
-                />
-              </div>
+            <form
+              className="space-y-4 md:space-y-6"
+              onSubmit={otpSent ? handleOtpSubmit : handleLoginSubmit}
+            >
+              {!otpSent ? (
+                <>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Your email
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="name@company.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <label
+                    htmlFor="otp"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    OTP
+                  </label>
+                  <input
+                    type="text"
+                    name="otp"
+                    id="otp"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required
+                    placeholder="Enter your OTP"
+                  />
+                </div>
+              )}
               {localError && (
                 <p className="text-sm text-red-500">{localError}</p>
               )}
@@ -96,8 +141,10 @@ const SignInCard = () => {
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                Sign in
+                {otpSent ? "Verify OTP" : "Sign in"}
               </button>
+            </form>
+            {!otpSent && (
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
                 <button
@@ -108,7 +155,7 @@ const SignInCard = () => {
                   Sign up
                 </button>
               </p>
-            </form>
+            )}
           </div>
         </div>
       </div>

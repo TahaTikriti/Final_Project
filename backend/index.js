@@ -3,11 +3,13 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 require("dotenv").config();
 const cors = require("cors");
-const crypto = require("crypto");
 const sessionSecret = process.env.SESSION_SECRET;
 const bcrypt = require("bcryptjs");
 const MongoStore = require("connect-mongo");
 const Schema = mongoose.Schema;
+const nodemailer = require("nodemailer");
+const crypto = require('crypto');  // For generating OTP
+
 
 
 
@@ -48,6 +50,14 @@ app.use(
   })
 );
 
+const generateOtp = () => {
+  // Generate a random number between 0 and 9999, then pad it to ensure it's always 4 digits
+  const otp = Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(4, "0");
+  return otp;
+};
+
 // Route to fetch all users
 app.get("/users", async (req, res) => {
   try {
@@ -84,7 +94,6 @@ app.get("/searchbyname", async (req, res) => {
   }
 });
 
-// Modified login route without bcrypt for password hashing and session management
 app.post("/login", async (req, res) => {
   try {
     const { EMAIL, PASSWORD } = req.body;
@@ -99,23 +108,78 @@ app.post("/login", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Compare the provided password with the password in the database
     if (PASSWORD !== user.PASSWORD) {
       return res.status(401).json({ message: "Incorrect password" });
     }
 
-    // Save user information in the session
-    req.session.user = { id: user._id, email: EMAIL };
-    req.session.save();
-    //console.log("user" + JSON.stringify(req.session.user));
-    //console.log(req.session);
-    res.json({ message: "Login successful", sessionID: req.sessionID });
+    // Generate a 4-digit OTP
+    const otp = Math.floor(Math.random() * 10000)
+      .toString()
+      .padStart(4, "0");
+    await User.updateOne({ _id: user._id }, { $set: { otp } }); // Update OTP in user's document
+    await sendOtpEmail(EMAIL, otp); // Send the OTP via email
+
+    res.json({
+      message: "OTP sent to your email. Please verify to complete login.",
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
   }
 });
-// Registration route
+
+
+app.post("/verify-login-otp", async (req, res) => {
+  const { EMAIL, otp } = req.body;
+
+  try {
+    const user = await User.findOne({ EMAIL, otp });
+    if (!user) {
+      return res.status(404).json({ message: "Invalid OTP or Email" });
+    }
+
+    // Clear the OTP from the database after successful verification
+    await User.updateOne({ _id: user._id }, { $unset: { otp: "" } });
+
+    // Save user information in the session
+    req.session.user = { id: user._id, email: EMAIL };
+    req.session.save();
+
+    res.json({ message: "Login successful", sessionID: req.sessionID });
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+
+
+// Configure nodemailer
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "52130469@students.liu.edu.lb", // Use environment variables in production
+    pass: "id52130469",
+  },
+}); 
+
+// Helper function to send OTP
+const sendOtpEmail = async (email, otp) => {
+  const mailOptions = {
+    from: "tutorium961@gmail.com",
+    to: email,
+    subject: "Verify Your Account",
+    text: `Your OTP for account verification is: ${otp}`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully to " + email);
+  } catch (error) {
+    console.error("Failed to send email:", error);
+  }
+};
+
 app.post("/register", async (req, res) => {
   const { EMAIL, PASSWORD } = req.body;
   if (!EMAIL || !PASSWORD) {
@@ -130,15 +194,62 @@ app.post("/register", async (req, res) => {
         .json({ message: "User already exists with this email" });
     }
 
-    const newUser = { EMAIL, PASSWORD };
-    await User.insertOne(newUser);
+    const otp = generateOtp(); // Generate a 4-digit OTP as a string
+    const newUser = { EMAIL, PASSWORD, otp, verified: false };
+    await User.insertOne(newUser); // Assuming User is a direct MongoDB collection access
+    await sendOtpEmail(EMAIL, otp); // Send OTP email
 
-    res.status(201).json({ message: "User registered successfully" });
+    res
+      .status(201)
+      .json({ message: "Registration successful, verify your email" });
   } catch (error) {
     console.error("Error during registration:", error);
     res.status(500).json({ message: "Server Error" });
   }
 });
+
+
+app.post("/verify-otp", async (req, res) => {
+  const { EMAIL, otp } = req.body;
+
+  try {
+    const user = await User.findOne({ EMAIL, otp }); // Direct string comparison
+    if (!user) {
+      return res.status(404).json({ message: "Invalid OTP or Email" });
+    }
+
+    await User.updateOne({ _id: user._id }, { $set: { verified: true } });
+    res.json({ message: "Account verified successfully" });
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// // Registration route
+// app.post("/register", async (req, res) => {
+//   const { EMAIL, PASSWORD } = req.body;
+//   if (!EMAIL || !PASSWORD) {
+//     return res.status(400).json({ message: "Email and password are required" });
+//   }
+
+//   try {
+//     const existingUser = await User.findOne({ EMAIL });
+//     if (existingUser) {
+//       return res
+//         .status(409)
+//         .json({ message: "User already exists with this email" });
+//     }
+
+//     const newUser = { EMAIL, PASSWORD };
+//     await User.insertOne(newUser);
+
+//     res.status(201).json({ message: "User registered successfully" });
+//   } catch (error) {
+//     console.error("Error during registration:", error);
+//     res.status(500).json({ message: "Server Error" });
+//   }
+// });
 
 // Route to search users by location
 app.get("/searchbylocation", async (req, res) => {

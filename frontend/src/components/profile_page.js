@@ -7,18 +7,24 @@ export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editMode, setEditMode] = useState(false);  // To toggle edit form
+  const [editMode, setEditMode] = useState(false); // To toggle edit form
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const sessionResponse = await axios.get("http://localhost:5000/session");
+        const sessionResponse = await axios.get(
+          "http://localhost:5000/session"
+        );
         if (sessionResponse.data.isAuthenticated) {
           const userId = sessionResponse.data.user.id;
-          const userDetails = await axios.get(`http://localhost:5000/user/${userId}`);
+          const userDetails = await axios.get(
+            `http://localhost:5000/user/${userId}`
+          );
           setUser(userDetails.data);
-          const skillsResponse = await axios.get(`http://localhost:5000/user_skills/${userId}`);
-          setSkills(skillsResponse.data.skills);
+          const skillsResponse = await axios.get(
+            `http://localhost:5000/user_skills/${userId}`
+          );
+          setSkills(skillsResponse.data.skills || []); // Ensure skills is always an array
         } else {
           alert("Not authenticated");
         }
@@ -53,8 +59,6 @@ export default function ProfilePage() {
     );
   }
 
- 
-
   if (!user) {
     return <div>User not found or not logged in</div>;
   }
@@ -66,7 +70,10 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center gap-4">
             <div className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden">
               <img
-                src={user.PROFILE_PICTURE}
+                src={
+                  user.PROFILE_PICTURE ||
+                  "https://avatar.iran.liara.run/public/boy"
+                }
                 alt="User Avatar"
                 className="object-cover h-full w-full"
               />
@@ -90,7 +97,10 @@ export default function ProfilePage() {
               <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                 Contact
               </button>
-              <button onClick={handleEditToggle} className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100">
+              <button
+                onClick={handleEditToggle}
+                className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100"
+              >
                 Edit Profile
               </button>
             </div>
@@ -103,13 +113,15 @@ export default function ProfilePage() {
                 Skills
               </h2>
               <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                {user.SKILLS.map((skill) => (
-                  <UserSkill
-                    key={skill.id}
-                    skillName={skill.skill_name}
-                    proficiency={skill.proficiency}
-                  />
-                ))}
+                {user &&
+                  user.SKILLS &&
+                  user.SKILLS.map((skill) => (
+                    <UserSkill
+                      key={skill.id}
+                      skillName={skill.skill_name}
+                      proficiency={skill.proficiency}
+                    />
+                  ))}
               </div>
             </div>
           </div>
@@ -118,8 +130,6 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-
 
 // SVG icons remain unchanged, included in your component.
 
