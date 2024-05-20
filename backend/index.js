@@ -342,27 +342,30 @@ app.get("/searchbyskill", async (req, res) => {
   try {
     const { skillname } = req.query;
     if (!skillname) {
-      return res
-        .status(400)
-        .json({ message: "Skill name parameter is required" });
+      return res.status(400).json({ message: "Skill name parameter is required" });
     }
 
-    const skills = await Skill.find({
-      SKILL_NAME: { $regex: `^${skillname}`, $options: "i" },
+    console.log("Searching for skill:", skillname); // Debugging log
+
+    // Search for users with the specified skill name in the "USER" collection
+    const users = await User.find({
+      "SKILLS.skill_name": { $regex: new RegExp(skillname, "i") }
     }).toArray();
 
-    if (skills.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No skills found with the given name" });
+    console.log("Users found:", users.length); // Debugging log
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found with the given skill" });
     }
 
-    res.json(skills);
+    res.json(users);
   } catch (error) {
-    console.error(error);
+    console.error("Error encountered:", error); // More detailed error logging
     res.status(500).json({ message: "Server Error" });
   }
 });
+
+
 
 // Route to fetch all skills
 app.get("/getskills", async (req, res) => {
