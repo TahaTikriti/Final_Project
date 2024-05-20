@@ -3,6 +3,10 @@ import axios from "axios";
 import UserSkill from "./UserSkill";
 import EditProfile from "./editProfile";
 
+export let userBio = null;
+export let userLocation = null;
+ // Exportable variable for user's bio
+
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [skills, setSkills] = useState([]);
@@ -21,6 +25,9 @@ export default function ProfilePage() {
             `http://localhost:5000/user/${userId}`
           );
           setUser(userDetails.data);
+          userBio = userDetails.data.BIO; 
+          userLocation = userDetails.data.LOCATION;
+          // Assign the bio to the exportable variable
           const skillsResponse = await axios.get(
             `http://localhost:5000/user_skills/${userId}`
           );
@@ -80,18 +87,18 @@ export default function ProfilePage() {
             </div>
             <div className="text-center">
               <h1 className="text-2xl font-bold md:text-3xl text-white">
-                <UserIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
+                <UserIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 {user.FULL_NAME}
               </h1>
               <p className="text-gray-500 dark:text-gray-400">
-                <BookIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
+                <BookIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 {user.UNIVERSITY_NAME}
               </p>
               <p className="text-gray-500 dark:text-gray-400">
-                <LocationPinIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
+                <LocationPinIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 {user.LOCATION}
               </p>
-              <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>{" "}
+              <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p> 
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
               <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
@@ -109,7 +116,7 @@ export default function ProfilePage() {
           <div className="space-y-6">
             <div>
               <h2 className="text-xl font-bold text-white">
-                <ActivityIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />{" "}
+                <ActivityIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 Skills
               </h2>
               <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
@@ -130,6 +137,9 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+// SVG icons are assumed to be defined somewhere else as before.
+
 
 // SVG icons remain unchanged, included in your component.
 

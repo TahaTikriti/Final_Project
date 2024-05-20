@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { userBio,userLocation } from './profile_page';
 function EditProfile({ closeEdit }) {
     const [formData, setFormData] = useState({
         profilePicture: null,
-        bio: '',
-        location: '',
+        bio: userBio,
+        location: userLocation,
         skills: [{ skillName: '', skillProficiency: '' }]
     });
 
