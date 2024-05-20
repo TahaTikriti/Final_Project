@@ -63,16 +63,16 @@ const Header = () => {
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
-        <Navbar.Link href="#" onClick={() => handleNavigation("/")}>
+        <Navbar.Link href="" onClick={() => handleNavigation("/")}>
           Home
         </Navbar.Link>
-        <Navbar.Link href="#" onClick={() => handleNavigation("/profile")}>
+        <Navbar.Link href="" onClick={() => handleNavigation("/profile")}>
           Profile
         </Navbar.Link>
-        <Navbar.Link href="#" onClick={() => handleNavigation("/tutors")}>
+        <Navbar.Link href="" onClick={() => handleNavigation("/tutors")}>
           Browse Tutors
         </Navbar.Link>
-        <Navbar.Link href="#" onClick={() => handleNavigation("/topics")}>
+        <Navbar.Link href="" onClick={() => handleNavigation("/topics")}>
           Topics
         </Navbar.Link>
       </Navbar.Collapse>
