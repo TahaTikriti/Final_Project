@@ -187,11 +187,16 @@ const sendOtpEmail = async (email, otp) => {
 };
 
 app.post("/register", async (req, res) => {
-  const { EMAIL, PASSWORD, FULL_NAME, UNIVERSITY_NAME, PHONE_NUMBER } = req.body;
+  const { EMAIL, PASSWORD, FULL_NAME, UNIVERSITY_NAME, PHONE_NUMBER, GENDER } = req.body;
 
-  // Check if all required fields are present
-  if (!EMAIL || !PASSWORD || !FULL_NAME || !UNIVERSITY_NAME || !PHONE_NUMBER) {
-    return res.status(400).json({ message: "All fields are required" });
+  // Check if all required fields are present including gender
+  if (!EMAIL || !PASSWORD || !FULL_NAME || !UNIVERSITY_NAME || !PHONE_NUMBER || !GENDER) {
+    return res.status(400).json({ message: "All fields are required, including gender" });
+  }
+
+  // Validate the gender
+  if (!['Male', 'Female'].includes(GENDER)) {
+    return res.status(400).json({ message: "Invalid gender. Only 'Male' or 'Female' is accepted." });
   }
 
   try {
@@ -206,13 +211,14 @@ app.post("/register", async (req, res) => {
     // Generate a one-time password (OTP)
     const otp = generateOtp(); // Assuming generateOtp() is defined to generate a 4-digit OTP as a string
 
-    // Create new user object including phone number
+    // Create new user object including gender
     const newUser = {
       EMAIL,
       PASSWORD,
       FULL_NAME,
       UNIVERSITY_NAME,
-      PHONE_NUMBER, // Add phone number to the new user object
+      PHONE_NUMBER,
+      GENDER, // Include gender in the new user object
       otp,
       verified: false
     };

@@ -10,6 +10,7 @@ const RegisterForm = () => {
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [university, setUniversity] = useState("");
+  const [gender, setGender] = useState(""); 
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false); // Track whether OTP has been sent
   const [error, setError] = useState("");
@@ -28,7 +29,8 @@ const RegisterForm = () => {
         PASSWORD: password,
         FULL_NAME: fullName,
         UNIVERSITY_NAME: university,
-        PHONE_NUMBER: phoneNumber
+        PHONE_NUMBER: phoneNumber,
+        GENDER: gender 
       });
       setOtpSent(true); // Indicate that OTP has been sent
       setError(""); // Clear any existing errors
@@ -80,6 +82,31 @@ const RegisterForm = () => {
                   className="space-y-4 md:space-y-4"
                   onSubmit={handleRegistration}
                 >
+                  <div>
+                    <span className="text-gray-900 dark:text-white">Gender:</span>
+                    <label htmlFor="male" className="ml-2">
+                      <input
+                        type="radio"
+                        id="male"
+                        name="gender"
+                        value="Male"
+                        checked={gender === "Male"}
+                        onChange={(e) => setGender(e.target.value)}
+                        className="accent-primary-600"
+                      /> Male
+                    </label>
+                    <label htmlFor="female" className="ml-4">
+                      <input
+                        type="radio"
+                        id="female"
+                        name="gender"
+                        value="Female"
+                        checked={gender === "Female"}
+                        onChange={(e) => setGender(e.target.value)}
+                        className="accent-primary-600"
+                      /> Female
+                    </label>
+                  </div>
                   <div>
                     <label
                       htmlFor="email"
