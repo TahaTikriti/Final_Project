@@ -245,6 +245,10 @@ app.post("/verify-otp", async (req, res) => {
     }
 
     await User.updateOne({ _id: user._id }, { $set: { verified: true } });
+    
+    // Save user information in the session
+    req.session.user = { id: user._id, email: EMAIL };
+    req.session.save();
     res.json({ message: "Account verified successfully" });
   } catch (error) {
     console.error("Error verifying OTP:", error);

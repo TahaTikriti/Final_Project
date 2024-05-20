@@ -48,7 +48,7 @@ const RegisterForm = () => {
         otp: otp,
       });
       alert("Verification successful!");
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       setError(
         "Failed to verify OTP: " +
