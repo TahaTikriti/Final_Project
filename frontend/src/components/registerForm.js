@@ -10,7 +10,7 @@ const RegisterForm = () => {
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [university, setUniversity] = useState("");
-  const [gender, setGender] = useState(""); 
+  const [gender, setGender] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false); // Track whether OTP has been sent
   const [error, setError] = useState("");
@@ -30,7 +30,7 @@ const RegisterForm = () => {
         FULL_NAME: fullName,
         UNIVERSITY_NAME: university,
         PHONE_NUMBER: phoneNumber,
-        GENDER: gender 
+        GENDER: gender
       });
       setOtpSent(true); // Indicate that OTP has been sent
       setError(""); // Clear any existing errors
@@ -61,53 +61,57 @@ const RegisterForm = () => {
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center px-6 py-6 mx-auto md:h-screen lg:py-0">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"
-          className="flex items-center space-x-3 rtl:space-x-reverse mb-2"
+          className="flex items-center space-x-3 rtl:space-x-reverse mb-4"
         >
-          <img src={logo} className="h-10" alt="Tutorium Logo" />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+          <img src={logo} className="h-12" alt="Tutorium Logo" />
+          <span className="self-center text-3xl font-semibold whitespace-nowrap dark:text-white">
             Tutorium
           </span>
         </a>
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-8 space-y-6 md:space-y-8 sm:p-10">
             {!otpSent ? (
               <>
-                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Create an account
-                </h1>
-                <form
-                  className="space-y-4 md:space-y-4"
-                  onSubmit={handleRegistration}
-                >
-                  <div>
+                <div className="flex justify-center">
+  <h1 className="text-2xl font-bold leading-tight tracking-tight text-gray-900 md:text-3xl dark:text-white">
+    Create an account
+  </h1>
+</div>
+
+                <form className="space-y-6 md:space-y-8" onSubmit={handleRegistration}>
+                  <div className="flex flex-col items-center mt-4">
                     <span className="text-gray-900 dark:text-white">Gender:</span>
-                    <label htmlFor="male" className="ml-2">
-                      <input
-                        type="radio"
-                        id="male"
-                        name="gender"
-                        value="Male"
-                        checked={gender === "Male"}
-                        onChange={(e) => setGender(e.target.value)}
-                        className="accent-primary-600"
-                      /> Male
-                    </label>
-                    <label htmlFor="female" className="ml-4">
-                      <input
-                        type="radio"
-                        id="female"
-                        name="gender"
-                        value="Female"
-                        checked={gender === "Female"}
-                        onChange={(e) => setGender(e.target.value)}
-                        className="accent-primary-600"
-                      /> Female
-                    </label>
+                    <div className="flex mt-2">
+                      <label htmlFor="male" className="ml-2 inline-flex items-center">
+                        <input
+                          type="radio"
+                          id="male"
+                          name="gender"
+                          value="Male"
+                          checked={gender === "Male"}
+                          onChange={(e) => setGender(e.target.value)}
+                          className="accent-primary-600"
+                        />
+                        <i className="fas fa-mars ml-2 text-lg" title="Male"></i> {/* Icon for Male */}
+                      </label>
+                      <label htmlFor="female" className="ml-4 inline-flex items-center">
+                        <input
+                          type="radio"
+                          id="female"
+                          name="gender"
+                          value="Female"
+                          checked={gender === "Female"}
+                          onChange={(e) => setGender(e.target.value)}
+                          className="accent-primary-600"
+                        />
+                        <i className="fas fa-venus ml-2 text-lg" title="Female"></i> {/* Icon for Female */}
+                      </label>
+                    </div>
                   </div>
-                  <div>
+                  <div className="flex flex-col items-center mt-4">
                     <label
                       htmlFor="email"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -125,96 +129,83 @@ const RegisterForm = () => {
                       required
                     />
                   </div>
-                  <div>
-                    <label
-                      htmlFor="password"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      placeholder="••••••••"
-                    />
+                  <div className="flex flex-wrap justify-between space-y-4 md:space-y-0 md:flex-nowrap mt-4">
+                    <div className="flex flex-col items-center w-full md:w-1/2 pr-2">
+                      <label
+                        htmlFor="password"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required
+                        placeholder="••••••••"
+                      />
+                    </div>
+                    <div className="flex flex-col items-center w-full md:w-1/2 pl-2">
+                      <label
+                        htmlFor="confirm-password"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Confirm password
+                      </label>
+                      <input
+                        type="password"
+                        name="confirm-password"
+                        id="confirm-password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required
+                        placeholder="••••••••"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label
-                      htmlFor="confirm-password"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Confirm password
-                    </label>
-                    <input
-                      type="password"
-                      name="confirm-password"
-                      id="confirm-password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      placeholder="••••••••"
-                    />
+                  <div className="flex flex-wrap justify-between space-y-4 md:space-y-0 md:flex-nowrap mt-4">
+                    <div className="flex flex-col items-center w-full md:w-1/2 pr-2">
+                      <label
+                        htmlFor="phone-number"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone-number"
+                        id="phone-number"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required
+                        placeholder="Your phone number"
+                      />
+                    </div>
+                    <div className="flex flex-col items-center w-full md:w-1/2 pl-2">
+                      <label
+                        htmlFor="university"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        University
+                      </label>
+                      <input
+                        type="text"
+                        name="university"
+                        id="university"
+                        value={university}
+                        onChange={(e) => setUniversity(e.target.value)}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required
+                        placeholder="Your university"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label
-                      htmlFor="full-name"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Full name
-                    </label>
-                    <input
-                      type="text"
-                      name="full-name"
-                      id="full-name"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="phone-number"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone-number"
-                      id="phone-number"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      placeholder="Your phone number"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="university"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      University
-                    </label>
-                    <input
-                      type="text"
-                      name="university"
-                      id="university"
-                      value={university}
-                      onChange={(e) => setUniversity(e.target.value)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      placeholder="Your university"
-                    />
-                  </div>
+
                   {error && <p className="text-sm text-red-500">{error}</p>}
                   <button
                     type="submit"
@@ -236,7 +227,7 @@ const RegisterForm = () => {
               </>
             ) : (
               <>
-                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                <h1 className="text-2xl font-bold leading-tight tracking-tight text-gray-900 md:text-3xl dark:text-white">
                   Enter OTP
                 </h1>
                 <input
