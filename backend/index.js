@@ -72,13 +72,13 @@ app.get("/users", async (req, res) => {
 // Route to search user by name
 app.get("/searchbyname", async (req, res) => {
   try {
-    const { name } = req.query;
-    if (!name) {
+    const { FULL_NAME } = req.query;
+    if (!FULL_NAME) {
       return res.status(400).json({ message: "Name parameter is required" });
     }
 
     const users = await User.find({
-      name: { $regex: `^${name}`, $options: "i" },
+      FULL_NAME: { $regex: `^${FULL_NAME}`, $options: "i" },
     }).toArray();
 
     if (users.length === 0) {

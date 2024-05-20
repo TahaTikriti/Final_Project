@@ -28,7 +28,7 @@ export default function Tutors() {
           url = `http://localhost:5000/searchbyskill?skillname=${term}`;
           break;
         case 'name':
-          url = `http://localhost:5000/searchbyname?name=${term}`;
+          url = `http://localhost:5000/searchbyname?FULL_NAME=${term}`;
           break;
         default:
           break;
