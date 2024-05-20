@@ -96,10 +96,15 @@ export default function Tutors() {
                         <span className="px-2 py-1 text-sm bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-100 rounded">Subject Placeholder</span>
                       </div>
                     </div>
-                    <button className="mt-4 px-4 py-2 text-sm text-primary-700 border border-primary-700 rounded hover:bg-primary-100 dark:text-primary-100 dark:border-primary-900 dark:hover:bg-primary-800 transition-colors">Contact</button>
+                    <button 
+                      onClick={() => window.open(`https://wa.me/${tutor.PHONE_NUMBER}`, '_blank')}
+                      className="mt-4 px-4 py-2 text-sm text-primary-700 border border-primary-700 rounded hover:bg-primary-100 dark:text-primary-100 dark:border-primary-900 dark:hover:bg-primary-800 transition-colors">
+                      Contact
+                    </button>
                   </div>
                 </div>
               ))
+              
             ) : (
               <div className="col-span-full text-center text-gray-500">No tutors found. Try adjusting your search criteria.</div>
             )}
