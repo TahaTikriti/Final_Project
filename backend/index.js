@@ -9,7 +9,8 @@ const MongoStore = require("connect-mongo");
 const Schema = mongoose.Schema;
 const nodemailer = require("nodemailer");
 const crypto = require('crypto');  // For generating OTP
-
+const multer = require('multer');
+const path = require('path');
 
 
 
@@ -34,6 +35,7 @@ const UserSkill = mongoose.connection.collection("USER_Skill");
 
 
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 
 // Configure express-session middleware
 app.use(
@@ -57,7 +59,25 @@ const generateOtp = () => {
     .padStart(4, "0");
   return otp;
 };
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'uploads/');  // Save files in 'uploads' folder in the root directory of your project
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));  // Ensure filename uniqueness
+  }
+});
 
+// Initialize multer with file filter to accept images only
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Not an image! Please upload only images.'), false);
+  }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 // Route to fetch all users
 app.get("/users", async (req, res) => {
   try {
@@ -433,16 +453,7 @@ app.get("/logout", (req, res) => {
     }
   });
 });
-const multer = require('multer');
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads'); // ensure this directory is existent or handled dynamically
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + file.originalname);
-  }
-});
-const upload = multer({ storage: storage });
+
 
 // Update profile route
 // Assuming you are using Express and Mongoose
@@ -490,7 +501,31 @@ app.post("/update-profile", async (req, res) => {
   }
 });
 
+app.post('/update-profile_picture', upload.single('profilePicture'), async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  const userId = req.session.user.id;  // Assuming user ID is stored in session
+  const profilePicturePath = req.file.path;  // Path where the file is saved
+
+  try {
+    // Update the user's PROFILE_PICTURE field in the MongoDB
+    await User.updateOne(
+      { _id: new mongoose.Types.ObjectId(userId) },
+      { $set: { PROFILE_PICTURE: profilePicturePath } }
+    );
+
+    res.json({ message: "Profile picture updated successfully", filePath: profilePicturePath });
+  } catch (error) {
+    console.error("Error updating profile picture:", error);
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
 
 
 
