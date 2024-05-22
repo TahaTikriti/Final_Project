@@ -151,6 +151,7 @@ const AppContent = () => {
         />
         <Route path="/topics" element={<Skills />} />
         <Route path="/tutors" element={<Tutors />} />
+        <Route path="/team" element={<Team />} />
       </Routes>
       <Footer />
     </>
