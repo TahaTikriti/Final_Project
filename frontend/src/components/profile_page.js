@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UserSkill from "./UserSkill";
 import EditProfile from "./editProfile";
+import EditAvailability from "./editAvailability";
 
 export let userBio = null;
 export let userLocation = null;
@@ -12,6 +13,7 @@ export default function ProfilePage() {
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false); // To toggle edit form
+  const [editAvailability, setEditAvailability] = useState(false); // To toggle availability form
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -47,6 +49,9 @@ export default function ProfilePage() {
 
   const handleEditToggle = () => {
     setEditMode(!editMode);
+  };
+  const handleAvailabilityToggle = () => {
+    setEditAvailability(!editAvailability);
   };
 
   if (loading) {
@@ -158,7 +163,9 @@ export default function ProfilePage() {
               <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p> 
             </div>
             <div className="flex flex-row justify-end gap-2 sm:flex-row">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ">
+              <button
+                onClick={handleAvailabilityToggle}
+               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ">
               Availablility
               </button>
               <button
@@ -170,6 +177,7 @@ export default function ProfilePage() {
             </div>
           </div>
           {editMode && <EditProfile user={user} closeEdit={handleEditToggle} />}
+          {editAvailability && <EditAvailability user={user} closeEdit={handleAvailabilityToggle} />}
           <div className="space-y-6">
             <div>
               <h2 className="text-xl font-bold text-white">

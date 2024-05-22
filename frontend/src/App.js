@@ -19,6 +19,7 @@ import Footer from "./components/footer";
 import Team from "./components/team";
 import EditProfile from "./components/editProfile";
 import axios from "axios";
+import "@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css";
 axios.defaults.withCredentials = true;
 
 

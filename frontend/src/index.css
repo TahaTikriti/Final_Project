@@ -5,6 +5,9 @@
 body{
   background: #102031;
 }
+.my-timepicker select:not([size]) {
+  background-image: none; /* Remove the double arrow image */
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
