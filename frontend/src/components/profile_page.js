@@ -16,6 +16,7 @@ export default function ProfilePage() {
   const fileInputRef = useRef(null);
   const [editAvailability, setEditAvailability] = useState(false); // To toggle availability form
 
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -51,6 +52,36 @@ export default function ProfilePage() {
   const handleEditToggle = () => {
     setEditMode(!editMode);
   };
+  const handleAvailabilityToggle = () => {
+    setEditAvailability(!editAvailability);
+  };
+  const handleProfilePicClick = () => {
+    fileInputRef.current.click();
+  };
+ 
+const handleFileChange = async (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const formData = new FormData();
+    formData.append("profilePicture", file);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/update-profile_picture",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("File upload success:", response.data);
+      // Update user state or perform other actions based on the response
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  }
+};
 
   if (loading) {
     return (
