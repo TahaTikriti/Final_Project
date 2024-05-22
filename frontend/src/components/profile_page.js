@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import UserSkill from "./UserSkill";
 import EditProfile from "./editProfile";
@@ -13,6 +13,7 @@ export default function ProfilePage() {
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false); // To toggle edit form
+  const fileInputRef = useRef(null);
   const [editAvailability, setEditAvailability] = useState(false); // To toggle availability form
 
   useEffect(() => {
@@ -49,9 +50,6 @@ export default function ProfilePage() {
 
   const handleEditToggle = () => {
     setEditMode(!editMode);
-  };
-  const handleAvailabilityToggle = () => {
-    setEditAvailability(!editAvailability);
   };
 
   if (loading) {
@@ -135,16 +133,26 @@ export default function ProfilePage() {
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl space-y-8">
           <div className="flex flex-col items-center gap-4">
-            <div className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden">
+          <div className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden cursor-pointer"
+                 onClick={handleProfilePicClick}>
               <img
-                src={
-                  user.PROFILE_PICTURE ||
-                  (user.GENDER === "Male"
-                    ? "https://avatar.iran.liara.run/public/boy"
-                    : "https://avatar.iran.liara.run/public/girl")
-                }
-                alt="User Avatar"
-                className="object-cover h-full w-full"
+  src={
+    user.PROFILE_PICTURE
+      ? `http://localhost:5000/${user.PROFILE_PICTURE.replace(/\\/g, "/")}`
+      : (user.GENDER === "Male"
+          ? "https://avatar.iran.liara.run/public/boy"
+          : "https://avatar.iran.liara.run/public/girl")
+  }
+  alt="User Avatar"
+  className="object-cover h-full w-full"
+/>
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: "none" }}
+                accept="image/*"
               />
             </div>
             <div className="text-center">
