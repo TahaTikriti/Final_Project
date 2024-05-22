@@ -528,6 +528,45 @@ app.post('/update-profile_picture', upload.single('profilePicture'), async (req,
   }
 });
 
+app.post('/delete-skill', async (req, res) => {
+  const { userId, skillName } = req.body;
+
+  if (!userId || !skillName) {
+    console.log("User ID or Skill name not provided.");
+    return res.status(400).send('User ID and Skill name are required');
+  }
+
+  console.log(`Attempting to delete skill: '${skillName}' for user ID: ${userId}`);
+
+  try {
+    const userBeforeUpdate = await User.findOne({ _id: new mongoose.Types.ObjectId(userId) });
+    console.log('User before update:', userBeforeUpdate.SKILLS);
+
+    const result = await User.updateOne(
+      { _id: new mongoose.Types.ObjectId(userId) },
+      { $pull: { SKILLS: { skill_name: skillName } } }
+    );
+
+    console.log('MongoDB Update Result:', result);
+
+    if (result.modifiedCount === 0) {
+      console.log('Skill not found or not deleted in the document.');
+      return res.status(404).send('Skill not found or not deleted');
+    }
+
+    res.send('Skill deleted successfully');
+  } catch (error) {
+    console.error('Failed to delete skill:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+
+
+
+
+
+
 
 
 // Start the server

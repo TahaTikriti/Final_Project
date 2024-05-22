@@ -15,7 +15,7 @@ export default function ProfilePage() {
   const [editMode, setEditMode] = useState(false); // To toggle edit form
   const fileInputRef = useRef(null);
   const [editAvailability, setEditAvailability] = useState(false); // To toggle availability form
-
+  const [skillToDelete, setSkillToDelete] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -154,7 +154,44 @@ const handleFileChange = async (event) => {
     );
   }
 
-
+  const handleDeleteSkillInput = async () => {
+    if (!skillToDelete.trim()) {
+      alert('Please enter a skill name to delete.');
+      return;
+    }
+  
+    try {
+      // Retrieve user session to get the user ID
+      const sessionResponse = await axios.get('http://localhost:5000/session', { withCredentials: true });
+      const userId = sessionResponse.data.user.id;
+  
+      const response = await axios.post('http://localhost:5000/delete-skill', {
+        userId,
+        skillName: skillToDelete.trim()
+      }, {
+        withCredentials: true
+      });
+  
+      if (response.status === 200) {
+        alert("Skill deleted successfully!");
+        setSkills(prevSkills => prevSkills.filter(skill => skill.skill_name !== skillToDelete.trim()));
+        setSkillToDelete(''); // Clear the input field
+      } else {
+        alert("Skill not found or not deleted");
+      }
+    } catch (error) {
+      console.error("Error deleting skill:", error);
+      alert(`Error occurred while trying to delete the skill: ${error.response ? error.response.data : 'No response from server'}`);
+    }
+  };
+  
+  
+  
+  
+  
+  
+  
+  
   if (!user) {
     return <div>User not found or not logged in</div>;
   }
@@ -164,20 +201,19 @@ const handleFileChange = async (event) => {
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl space-y-8">
           <div className="flex flex-col items-center gap-4">
-          <div className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden cursor-pointer"
+            <div className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden cursor-pointer"
                  onClick={handleProfilePicClick}>
               <img
-  src={
-    user.PROFILE_PICTURE
-      ? `http://localhost:5000/${user.PROFILE_PICTURE.replace(/\\/g, "/")}`
-      : (user.GENDER === "Male"
-          ? "https://avatar.iran.liara.run/public/boy"
-          : "https://avatar.iran.liara.run/public/girl")
-  }
-  alt="User Avatar"
-  className="object-cover h-full w-full"
-/>
-
+                src={
+                  user.PROFILE_PICTURE
+                    ? `http://localhost:5000/${user.PROFILE_PICTURE.replace(/\\/g, "/")}`
+                    : (user.GENDER === "Male"
+                        ? "https://avatar.iran.liara.run/public/boy"
+                        : "https://avatar.iran.liara.run/public/girl")
+                }
+                alt="User Avatar"
+                className="object-cover h-full w-full"
+              />
               <input
                 type="file"
                 ref={fileInputRef}
@@ -199,18 +235,17 @@ const handleFileChange = async (event) => {
                 <LocationPinIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 {user.LOCATION}
               </p>
-              <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p> 
+              <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>
             </div>
-            <div className="flex flex-row justify-end gap-2 sm:flex-row">
+            <div className="flex flex-row justify-end gap-2">
               <button
                 onClick={handleAvailabilityToggle}
-               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ">
-              Availablility
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                Availability
               </button>
               <button
                 onClick={handleEditToggle}
-                className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100"
-              >
+                className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100">
                 Edit User
               </button>
             </div>
@@ -218,30 +253,40 @@ const handleFileChange = async (event) => {
           {editMode && <EditProfile user={user} closeEdit={handleEditToggle} />}
           {editAvailability && <EditAvailability user={user} closeEdit={handleAvailabilityToggle} />}
           <div className="space-y-6">
-            <div>
-              <h2 className="text-xl font-bold text-white">
-                <ActivityIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
-                Skills
-              </h2>
-              <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                {user &&
-                  user.SKILLS &&
-                  user.SKILLS.map((skill) => (
-                    <UserSkill
-                      key={skill.id}
-                      skillName={skill.skill_name}
-                      proficiency={skill.proficiency}
-                    />
-                  ))}
-              </div>
+            <h2 className="text-xl font-bold text-white">
+              <ActivityIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+              Skills
+            </h2>
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+              {user && user.SKILLS && user.SKILLS.map((skill) => (
+                <UserSkill
+                  key={skill.id}
+                  skillName={skill.skill_name}
+                  proficiency={skill.proficiency}
+                />
+              ))}
+            </div>
+            <div className="mt-4 flex items-center">
+              <input
+                type="text"
+                placeholder="Enter skill name to delete"
+                value={skillToDelete}
+                onChange={e => setSkillToDelete(e.target.value)}
+                className="flex-grow p-2 border border-gray-300 rounded shadow-sm"
+              />
+              <button
+                onClick={handleDeleteSkillInput}
+                className="ml-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Delete Skill
+              </button>
             </div>
           </div>
         </div>
       </div>
-      
     </div>
-   
   );
+  
 }
 
 // SVG icons are assumed to be defined somewhere else as before.
