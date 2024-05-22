@@ -207,6 +207,7 @@ const sendOtpEmail = async (email, otp) => {
 };
 
 app.post("/register", async (req, res) => {
+  console.log(req.body);
   const { EMAIL, PASSWORD, FULL_NAME, UNIVERSITY_NAME, PHONE_NUMBER, GENDER } = req.body;
 
   // Check if all required fields are present including gender
