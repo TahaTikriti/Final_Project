@@ -38,7 +38,8 @@ const Header = () => {
       </Navbar.Brand>
       <div className="flex md:order-2 mr-4 lg:mr-8">
         {isLoggedIn ? (
-          <Button
+          <button
+            className="px-5 py-2.5 text-sm font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-900"
             onClick={() => {
               axios
                 .get("http://localhost:5000/logout", {
@@ -50,15 +51,49 @@ const Header = () => {
                 });
             }}
           >
-            Logout
-          </Button>
+            <svg
+              className="w-6 h-6 text-gray-800 dark:text-white mr-2"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"
+              />
+            </svg>
+            <span>Logout</span>
+          </button>
         ) : (
-          <Button
-            className="bg-primary-500 hover:bg-primary-600 dark:bg-primary-700 dark:hover:bg-primary-800"
+          <button
+            className="px-5 py-2.5 text-sm font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-900"
             onClick={() => handleNavigation("/login")}
           >
+            <svg
+              className="w-6 h-6 text-gray-800 dark:text-white mr-2"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"
+              />
+            </svg>
             Login
-          </Button>
+          </button>
         )}
         <Navbar.Toggle />
       </div>

@@ -21,6 +21,7 @@ import EditProfile from "./components/editProfile";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
+
 const ProtectedRoute = ({ component: Component }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const location = useLocation();

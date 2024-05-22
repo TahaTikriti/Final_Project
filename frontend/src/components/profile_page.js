@@ -134,7 +134,9 @@ export default function ProfilePage() {
               <img
                 src={
                   user.PROFILE_PICTURE ||
-                  "https://avatar.iran.liara.run/public/boy"
+                  (user.GENDER === "Male"
+                    ? "https://avatar.iran.liara.run/public/boy"
+                    : "https://avatar.iran.liara.run/public/girl")
                 }
                 alt="User Avatar"
                 className="object-cover h-full w-full"
@@ -155,15 +157,15 @@ export default function ProfilePage() {
               </p>
               <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p> 
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                Contact
+            <div className="flex flex-row justify-end gap-2 sm:flex-row">
+              <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ">
+              Availablility
               </button>
               <button
                 onClick={handleEditToggle}
                 className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100"
               >
-                Edit Profile
+                Edit User
               </button>
             </div>
           </div>
@@ -189,7 +191,9 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+      
     </div>
+   
   );
 }
 
