@@ -20,6 +20,7 @@ import Team from "./components/team";
 import EditProfile from "./components/editProfile";
 import axios from "axios";
 import "@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css";
+import Introduction from "./components/introduction";
 axios.defaults.withCredentials = true;
 
 
@@ -153,6 +154,7 @@ const AppContent = () => {
         <Route path="/tutors" element={<Tutors />} />
         <Route path="/team" element={<Team />} />
       </Routes>
+      <Introduction />
       <Footer />
     </>
   );
