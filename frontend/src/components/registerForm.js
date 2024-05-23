@@ -15,11 +15,18 @@ const RegisterForm = () => {
   const [otpSent, setOtpSent] = useState(false); // Track whether OTP has been sent
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const isPasswordStrong = (password) => {
+    const regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    return regex.test(password);
+  };
   const handleRegistration = async (event) => {
     event.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      return;
+    }
+    if (!isPasswordStrong(password)) {
+      setError("Password must be at least 8 characters long and include upper and lower case letters, numbers, and special characters.");
       return;
     }
 
@@ -32,14 +39,11 @@ const RegisterForm = () => {
         PHONE_NUMBER: phoneNumber,
         GENDER: gender
       });
-      setOtpSent(true); // Indicate that OTP has been sent
-      setError(""); // Clear any existing errors
+      setOtpSent(true);
+      setError("");
       alert("OTP sent to your email. Please verify to complete registration.");
     } catch (error) {
-      setError(
-        "Failed to register: " +
-          (error.response?.data?.message || error.message)
-      );
+      setError("Failed to register: " + (error.response?.data?.message || error.message));
     }
   };
 
