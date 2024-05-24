@@ -3,9 +3,10 @@ import axios from "axios";
 import UserSkill from "./UserSkill";
 import EditProfile from "./editProfile";
 import EditAvailability from "./editAvailability";
-
+import { FaDollarSign } from 'react-icons/fa';
 export let userBio = null;
 export let userLocation = null;
+export let userHourlRate = null;
  // Exportable variable for user's bio
 
 export default function ProfilePage() {
@@ -31,6 +32,7 @@ export default function ProfilePage() {
           setUser(userDetails.data);
           userBio = userDetails.data.BIO; 
           userLocation = userDetails.data.LOCATION;
+          userHourlRate = userDetails.data.HOURLY_RATE;
           // Assign the bio to the exportable variable
           const skillsResponse = await axios.get(
             `http://localhost:5000/user_skills/${userId}`
@@ -235,6 +237,12 @@ const handleFileChange = async (event) => {
                 <LocationPinIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 {user.LOCATION}
               </p>
+              {user.HOURLY_RATE && (
+    <p className="text-gray-500 dark:text-gray-400">
+      <FaDollarSign className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+      {`${parseFloat(user.HOURLY_RATE).toFixed(2)}`} / Hr
+    </p>
+  )}
               <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>
             </div>
             <div className="flex flex-row justify-end gap-2">

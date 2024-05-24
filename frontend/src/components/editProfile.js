@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { userBio, userLocation } from "./profile_page";
+import { userBio, userLocation , userHourlRate} from "./profile_page";
 function EditProfile({ closeEdit }) {
   const [formData, setFormData] = useState({
     profilePicture: null,
     bio: userBio,
     location: userLocation,
     skills: [{ skillName: "", skillProficiency: "" }],
+    hourlyRate: userHourlRate,
   });
 
   const handleChange = (e) => {
@@ -53,6 +54,7 @@ function EditProfile({ closeEdit }) {
       skills: formData.skills.filter(
         (skill) => skill.skillName && skill.skillProficiency
       ),
+      HOURLY_RATE: formData.hourlyRate, // Include hourly rate in the data sent to the server
     };
 
     console.log("Sending data:", updatedData);
@@ -92,7 +94,20 @@ function EditProfile({ closeEdit }) {
             </h3>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
-            
+          <div className="sm:col-span-2">
+  <label htmlFor="hourlyRate" className="block mb-2 text-sm font-medium text-gray-900 dark:text:white">
+    Hourly Rate ($ per hour)
+  </label>
+  <input
+    type="number"
+    id="hourlyRate"
+    name="hourlyRate"
+    value={formData.hourlyRate}
+    onChange={handleChange}
+    className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text:white"
+    placeholder="Enter your hourly rate"
+  />
+</div>
             <div className="sm:col-span-2">
               <label
                 htmlFor="bio"
