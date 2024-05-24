@@ -21,6 +21,7 @@ import EditProfile from "./components/editProfile";
 import PasswordResetPage from "./components/password_Reset_From";
 import axios from "axios";
 import "@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css";
+import Introduction from "./components/introduction";
 axios.defaults.withCredentials = true;
 
 
@@ -156,6 +157,7 @@ const AppContent = () => {
         {/* Add the route for password reset */}
         <Route path="/reset-password" element={<PasswordResetPage />} />
       </Routes>
+      <Introduction />
       <Footer />
     </>
   );
