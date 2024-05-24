@@ -18,6 +18,7 @@ import Tutors from "./components/tutors";
 import Footer from "./components/footer";
 import Team from "./components/team";
 import EditProfile from "./components/editProfile";
+import PasswordResetPage from "./components/password_Reset_From";
 import axios from "axios";
 import "@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css";
 import Introduction from "./components/introduction";
@@ -153,6 +154,8 @@ const AppContent = () => {
         <Route path="/topics" element={<Skills />} />
         <Route path="/tutors" element={<Tutors />} />
         <Route path="/team" element={<Team />} />
+        {/* Add the route for password reset */}
+        <Route path="/reset-password" element={<PasswordResetPage />} />
       </Routes>
       <Introduction />
       <Footer />

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Header from './header'; // Adjust the import path as necessary
 
 export default function Tutors() {
   const [tutors, setTutors] = useState([]);
