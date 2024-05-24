@@ -7,7 +7,7 @@ const SignInCard = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false); // To track if OTP has been sent and the form should now accept OTP
+  const [otpSent, setOtpSent] = useState(false);
   const [localError, setLocalError] = useState("");
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const SignInCard = () => {
         EMAIL: email,
         PASSWORD: password,
       });
-      setOtpSent(true); // After successful initial login, prompt for OTP
+      setOtpSent(true);
       setLocalError("");
     } catch (error) {
       const errorMsg = error.response
@@ -39,7 +39,7 @@ const SignInCard = () => {
         }
       );
       alert("Login successful!");
-      navigate("/"); // Redirect to home after successful OTP verification
+      navigate("/");
     } catch (error) {
       const errorMsg = error.response
         ? error.response.data.message
@@ -47,8 +47,24 @@ const SignInCard = () => {
       setLocalError("Failed to verify OTP: " + errorMsg);
     }
   };
-  const handleSignUp = () => {  
-    navigate("/register"); };
+
+  const handleSignUp = () => {
+    navigate("/register");
+  };
+
+  const handleResetPasswordRequest = async () => {
+    try {
+      await axios.post("http://localhost:5000/reset-password-request", {
+        email: email, // Send the email to backend for password reset
+      });
+      alert("Password reset link sent to your email!");
+    } catch (error) {
+      const errorMsg = error.response
+        ? error.response.data.message
+        : error.message;
+      setLocalError("Failed to send password reset link: " + errorMsg);
+    }
+  };
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -142,6 +158,13 @@ const SignInCard = () => {
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 {otpSent ? "Verify OTP" : "Sign in"}
+              </button>
+              <button
+                type="button"
+                onClick={handleResetPasswordRequest} // Handle password reset request
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Forgot password?
               </button>
             </form>
             {!otpSent && (
