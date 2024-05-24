@@ -470,17 +470,17 @@ app.post("/update-profile", async (req, res) => {
   let updates = { $set: {}, $push: {} };
 
   // Check each field explicitly to ensure it's not undefined, null, or an empty string
-  if (typeof BIO === 'string' && BIO.trim() !== '') updates.$set.BIO = BIO;
-  if (typeof LOCATION === 'string' && LOCATION.trim() !== '') updates.$set.LOCATION = LOCATION;
-  if (typeof HOURLY_RATE === 'string' && HOURLY_RATE.trim() !== '') updates.$set.HOURLY_RATE = HOURLY_RATE; // Add HOURLY_RATE to updates
-  if (typeof MAJOR === 'string' && MAJOR.trim() !== '') updates.$set.MAJOR = MAJOR; // Add MAJOR to updates
+  if (typeof BIO === 'string' && BIO.trim() !== '') updates.$set.BIO = BIO.trim();
+  if (typeof LOCATION === 'string' && LOCATION.trim() !== '') updates.$set.LOCATION = LOCATION.trim();
+  if (typeof HOURLY_RATE === 'string' && HOURLY_RATE.trim() !== '') updates.$set.HOURLY_RATE = HOURLY_RATE.trim(); // Add HOURLY_RATE to updates
+  if (typeof MAJOR === 'string' && MAJOR.trim() !== '') updates.$set.MAJOR = MAJOR.trim(); // Add MAJOR to updates
 
   if (Array.isArray(skills)) {
     // Filter out any skills that do not have both name and proficiency provided
     const filteredSkills = skills.filter(skill => skill.skillName && skill.skillProficiency);
     if (filteredSkills.length > 0) {
       updates.$push.SKILLS = { 
-        $each: filteredSkills.map(skill => ({ skill_name: skill.skillName, proficiency: skill.skillProficiency }))
+        $each: filteredSkills.map(skill => ({ skill_name: skill.skillName.trim(), proficiency: skill.skillProficiency.trim() }))
       };
     }
   }
@@ -503,6 +503,7 @@ app.post("/update-profile", async (req, res) => {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 });
+
 
 app.post('/update-profile_picture', upload.single('profilePicture'), async (req, res) => {
   if (!req.session.user) {

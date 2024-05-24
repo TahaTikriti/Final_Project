@@ -18,6 +18,8 @@ export default function ProfilePage() {
   const fileInputRef = useRef(null);
   const [editAvailability, setEditAvailability] = useState(false); // To toggle availability form
   const [skillToDelete, setSkillToDelete] = useState('');
+  const [showDeleteSkill, setShowDeleteSkill] = useState(false);
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -35,11 +37,11 @@ export default function ProfilePage() {
           userLocation = userDetails.data.LOCATION;
           userHourlRate = userDetails.data.HOURLY_RATE;
           userMajor = userDetails.data.MAJOR;
-          // Assign the bio to the exportable variable
           const skillsResponse = await axios.get(
             `http://localhost:5000/user_skills/${userId}`
           );
           setSkills(skillsResponse.data.skills || []); // Ensure skills is always an array
+          console.log("Fetched skills:", skillsResponse.data.skills); // Debugging line
         } else {
           alert("Not authenticated");
         }
@@ -49,9 +51,10 @@ export default function ProfilePage() {
         setLoading(false);
       }
     };
-
+  
     fetchUserData();
   }, []);
+  
 
   const handleEditToggle = () => {
     setEditMode(!editMode);
@@ -62,7 +65,10 @@ export default function ProfilePage() {
   const handleProfilePicClick = () => {
     fileInputRef.current.click();
   };
- 
+ const toggleDeleteSkill = () => {
+  setShowDeleteSkill(!showDeleteSkill);
+};
+
 const handleFileChange = async (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -190,6 +196,10 @@ const handleFileChange = async (event) => {
   };
   
   
+  const handleDeleteAndRedirect = async () => {
+    await handleDeleteSkillInput();  // Ensure this function is awaited if it returns a Promise
+    window.location.href = "/profile";
+  };
   
   
   
@@ -236,19 +246,19 @@ const handleFileChange = async (event) => {
                 {user.UNIVERSITY_NAME}
               </p>
               <p className="text-gray-500 dark:text-gray-400">
-              <MajorIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
-              {user.MAJOR}
-            </p>
+                <MajorIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+                {user.MAJOR}
+              </p>
               <p className="text-gray-500 dark:text-gray-400">
                 <LocationPinIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 {user.LOCATION}
               </p>
               {user.HOURLY_RATE && (
-    <p className="text-gray-500 dark:text-gray-400">
-      <FaDollarSign className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
-      {`${parseFloat(user.HOURLY_RATE).toFixed(2)}`} / Hr
-    </p>
-  )}
+                <p className="text-gray-500 dark:text-gray-400">
+                  <FaDollarSign className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+                  {`${parseFloat(user.HOURLY_RATE).toFixed(2)}`} / Hr
+                </p>
+              )}
               <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>
             </div>
             <div className="flex flex-row justify-end gap-2">
@@ -262,7 +272,34 @@ const handleFileChange = async (event) => {
                 className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100">
                 Edit User
               </button>
+              <button
+                onClick={toggleDeleteSkill}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                Delete a Skill
+              </button>
             </div>
+            {showDeleteSkill && (
+              <div className="flex items-center mt-2">
+                <select
+                  value={skillToDelete}
+                  onChange={e => setSkillToDelete(e.target.value)}
+                  className="flex-grow p-2 border border-gray-300 rounded shadow-sm"
+                >
+                  <option value="">Select a skill to delete</option>
+                  {user.SKILLS.map(skill => (
+                    <option key={skill.skill_name} value={skill.skill_name}>
+                      {skill.skill_name}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={handleDeleteAndRedirect}
+                  className="ml-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
           {editMode && <EditProfile user={user} closeEdit={handleEditToggle} />}
           {editAvailability && <EditAvailability user={user} closeEdit={handleAvailabilityToggle} />}
@@ -280,26 +317,14 @@ const handleFileChange = async (event) => {
                 />
               ))}
             </div>
-            <div className="mt-4 flex items-center">
-              <input
-                type="text"
-                placeholder="Enter skill name to delete"
-                value={skillToDelete}
-                onChange={e => setSkillToDelete(e.target.value)}
-                className="flex-grow p-2 border border-gray-300 rounded shadow-sm"
-              />
-              <button
-                onClick={handleDeleteSkillInput}
-                className="ml-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-              >
-                Delete Skill
-              </button>
-            </div>
           </div>
         </div>
       </div>
     </div>
   );
+
+  
+  
   
 }
 
