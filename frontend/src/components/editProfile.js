@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { userBio, userLocation , userHourlRate} from "./profile_page";
+import { userBio, userLocation , userHourlRate, userMajor} from "./profile_page";
 function EditProfile({ closeEdit }) {
   const [formData, setFormData] = useState({
     profilePicture: null,
@@ -8,6 +8,7 @@ function EditProfile({ closeEdit }) {
     location: userLocation,
     skills: [{ skillName: "", skillProficiency: "" }],
     hourlyRate: userHourlRate,
+    major: userMajor ,
   });
 
   const handleChange = (e) => {
@@ -54,11 +55,12 @@ function EditProfile({ closeEdit }) {
       skills: formData.skills.filter(
         (skill) => skill.skillName && skill.skillProficiency
       ),
-      HOURLY_RATE: formData.hourlyRate, // Include hourly rate in the data sent to the server
+      HOURLY_RATE: formData.hourlyRate,
+      MAJOR: formData.major, // Include major in the data sent to the server
     };
-
+  
     console.log("Sending data:", updatedData);
-
+  
     try {
       const response = await axios.post(
         "http://localhost:5000/update-profile",
@@ -83,6 +85,7 @@ function EditProfile({ closeEdit }) {
       );
     }
   };
+  
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
@@ -94,6 +97,20 @@ function EditProfile({ closeEdit }) {
             </h3>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="sm:col-span-2">
+            <label htmlFor="major" className="block mb-2 text-sm font-medium text-gray-900 dark:text:white">
+              Major
+            </label>
+            <input
+              type="text"
+              id="major"
+              name="major"
+              value={formData.major}
+              onChange={handleChange}
+              className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text:white"
+              placeholder="Enter your major"
+            />
+          </div>
           <div className="sm:col-span-2">
   <label htmlFor="hourlyRate" className="block mb-2 text-sm font-medium text-gray-900 dark:text:white">
     Hourly Rate ($ per hour)

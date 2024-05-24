@@ -465,7 +465,7 @@ app.post("/update-profile", async (req, res) => {
 
   console.log(req.body);
   const userId = req.session.user.id; // Assuming this is how you store user IDs in the session
-  const { BIO, LOCATION, skills, HOURLY_RATE } = req.body; // Including HOURLY_RATE in the destructured assignment
+  const { BIO, LOCATION, skills, HOURLY_RATE, MAJOR } = req.body; // Including MAJOR in the destructured assignment
 
   let updates = { $set: {}, $push: {} };
 
@@ -473,6 +473,7 @@ app.post("/update-profile", async (req, res) => {
   if (typeof BIO === 'string' && BIO.trim() !== '') updates.$set.BIO = BIO;
   if (typeof LOCATION === 'string' && LOCATION.trim() !== '') updates.$set.LOCATION = LOCATION;
   if (typeof HOURLY_RATE === 'string' && HOURLY_RATE.trim() !== '') updates.$set.HOURLY_RATE = HOURLY_RATE; // Add HOURLY_RATE to updates
+  if (typeof MAJOR === 'string' && MAJOR.trim() !== '') updates.$set.MAJOR = MAJOR; // Add MAJOR to updates
 
   if (Array.isArray(skills)) {
     // Filter out any skills that do not have both name and proficiency provided
