@@ -35,12 +35,11 @@ function EditAvailability({ closeEdit }) {
   };
 
   const handleSubmit = async () => {
-    console.log("Submitting Availability:", availability);
-
+    // Assuming availability already holds Date objects or can be directly converted to Date objects
     try {
       const response = await axios.post(
         "http://localhost:5000/update-availability",
-        { availability }
+        { availability } // Send the availability object as-is
       );
       console.log("Availability Update successful:", response.data);
       alert("Availability updated successfully!");
@@ -53,6 +52,7 @@ function EditAvailability({ closeEdit }) {
       alert("Failed to update availability.");
     }
   };
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">

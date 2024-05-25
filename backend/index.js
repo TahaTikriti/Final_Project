@@ -662,6 +662,54 @@ app.post("/delete-skill", async (req, res) => {
   }
 });
 
+function isValidAvailability(availability) {
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+  return days.every(
+    (day) =>
+      Array.isArray(availability[day]) &&
+      availability[day].every(
+        (range) => Array.isArray(range) && range.length === 2
+      )
+  );
+}
+
+app.post("/update-availability", async (req, res) => {
+  const userEmail = req.session.user.email; // Ensure you have session handling setup
+  const { availability } = req.body;
+
+  if (!userEmail || !availability) {
+    return res.status(400).send("User email and availability are required.");
+  }
+
+  try {
+    // Update the user's availability in the database
+    const result = await User.updateOne(
+      { EMAIL: userEmail },
+      { $set: { AVAILABILITY: availability } },
+      { upsert: false }
+    );
+
+    if (result.modifiedCount === 0) {
+      res.status(404).send("User not found.");
+    } else {
+      res.send("Availability updated successfully.");
+    }
+  } catch (error) {
+    res.status(500).send("Error updating availability: " + error.message);
+  }
+});
+
+
+
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

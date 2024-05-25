@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import UserSkill from "./UserSkill";
+import AvailabilitySchedule from "./AvailabilitySchedule";
 import EditProfile from "./editProfile";
 import EditAvailability from "./editAvailability";
-import { FaDollarSign } from 'react-icons/fa';
+import { FaDollarSign } from "react-icons/fa";
 export let userBio = null;
 export let userLocation = null;
 export let userHourlRate = null;
 export let userMajor = null;
- // Exportable variable for user's bio
+// Exportable variable for user's bio
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -17,9 +18,8 @@ export default function ProfilePage() {
   const [editMode, setEditMode] = useState(false); // To toggle edit form
   const fileInputRef = useRef(null);
   const [editAvailability, setEditAvailability] = useState(false); // To toggle availability form
-  const [skillToDelete, setSkillToDelete] = useState('');
+  const [skillToDelete, setSkillToDelete] = useState("");
   const [showDeleteSkill, setShowDeleteSkill] = useState(false);
-
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -33,7 +33,7 @@ export default function ProfilePage() {
             `http://localhost:5000/user/${userId}`
           );
           setUser(userDetails.data);
-          userBio = userDetails.data.BIO; 
+          userBio = userDetails.data.BIO;
           userLocation = userDetails.data.LOCATION;
           userHourlRate = userDetails.data.HOURLY_RATE;
           userMajor = userDetails.data.MAJOR;
@@ -51,10 +51,9 @@ export default function ProfilePage() {
         setLoading(false);
       }
     };
-  
+
     fetchUserData();
   }, []);
-  
 
   const handleEditToggle = () => {
     setEditMode(!editMode);
@@ -65,33 +64,33 @@ export default function ProfilePage() {
   const handleProfilePicClick = () => {
     fileInputRef.current.click();
   };
- const toggleDeleteSkill = () => {
-  setShowDeleteSkill(!showDeleteSkill);
-};
+  const toggleDeleteSkill = () => {
+    setShowDeleteSkill(!showDeleteSkill);
+  };
 
-const handleFileChange = async (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    const formData = new FormData();
-    formData.append("profilePicture", file);
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("profilePicture", file);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/update-profile_picture",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("File upload success:", response.data);
-      // Update user state or perform other actions based on the response
-    } catch (error) {
-      console.error("Error uploading file:", error);
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/update-profile_picture",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("File upload success:", response.data);
+        // Update user state or perform other actions based on the response
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
-  }
-};
+  };
 
   if (loading) {
     return (
@@ -166,46 +165,54 @@ const handleFileChange = async (event) => {
 
   const handleDeleteSkillInput = async () => {
     if (!skillToDelete.trim()) {
-      alert('Please enter a skill name to delete.');
+      alert("Please enter a skill name to delete.");
       return;
     }
-  
+
     try {
       // Retrieve user session to get the user ID
-      const sessionResponse = await axios.get('http://localhost:5000/session', { withCredentials: true });
-      const userId = sessionResponse.data.user.id;
-  
-      const response = await axios.post('http://localhost:5000/delete-skill', {
-        userId,
-        skillName: skillToDelete.trim()
-      }, {
-        withCredentials: true
+      const sessionResponse = await axios.get("http://localhost:5000/session", {
+        withCredentials: true,
       });
-  
+      const userId = sessionResponse.data.user.id;
+
+      const response = await axios.post(
+        "http://localhost:5000/delete-skill",
+        {
+          userId,
+          skillName: skillToDelete.trim(),
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
       if (response.status === 200) {
         alert("Skill deleted successfully!");
-        setSkills(prevSkills => prevSkills.filter(skill => skill.skill_name !== skillToDelete.trim()));
-        setSkillToDelete(''); // Clear the input field
+        setSkills((prevSkills) =>
+          prevSkills.filter(
+            (skill) => skill.skill_name !== skillToDelete.trim()
+          )
+        );
+        setSkillToDelete(""); // Clear the input field
       } else {
         alert("Skill not found or not deleted");
       }
     } catch (error) {
       console.error("Error deleting skill:", error);
-      alert(`Error occurred while trying to delete the skill: ${error.response ? error.response.data : 'No response from server'}`);
+      alert(
+        `Error occurred while trying to delete the skill: ${
+          error.response ? error.response.data : "No response from server"
+        }`
+      );
     }
   };
-  
-  
+
   const handleDeleteAndRedirect = async () => {
-    await handleDeleteSkillInput();  // Ensure this function is awaited if it returns a Promise
+    await handleDeleteSkillInput(); // Ensure this function is awaited if it returns a Promise
     window.location.href = "/profile";
   };
-  
-  
-  
-  
-  
-  
+
   if (!user) {
     return <div>User not found or not logged in</div>;
   }
@@ -215,15 +222,20 @@ const handleFileChange = async (event) => {
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl space-y-8">
           <div className="flex flex-col items-center gap-4">
-            <div className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden cursor-pointer"
-                 onClick={handleProfilePicClick}>
+            <div
+              className="h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden cursor-pointer"
+              onClick={handleProfilePicClick}
+            >
               <img
                 src={
                   user.PROFILE_PICTURE
-                    ? `http://localhost:5000/${user.PROFILE_PICTURE.replace(/\\/g, "/")}`
-                    : (user.GENDER === "Male"
-                        ? "https://avatar.iran.liara.run/public/boy"
-                        : "https://avatar.iran.liara.run/public/girl")
+                    ? `http://localhost:5000/${user.PROFILE_PICTURE.replace(
+                        /\\/g,
+                        "/"
+                      )}`
+                    : user.GENDER === "Male"
+                    ? "https://avatar.iran.liara.run/public/boy"
+                    : "https://avatar.iran.liara.run/public/girl"
                 }
                 alt="User Avatar"
                 className="object-cover h-full w-full"
@@ -264,17 +276,20 @@ const handleFileChange = async (event) => {
             <div className="flex flex-row justify-end gap-2">
               <button
                 onClick={handleAvailabilityToggle}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
                 Availability
               </button>
               <button
                 onClick={handleEditToggle}
-                className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100">
+                className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100"
+              >
                 Edit User
               </button>
               <button
                 onClick={toggleDeleteSkill}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
                 Delete a Skill
               </button>
             </div>
@@ -282,11 +297,11 @@ const handleFileChange = async (event) => {
               <div className="flex items-center mt-2">
                 <select
                   value={skillToDelete}
-                  onChange={e => setSkillToDelete(e.target.value)}
+                  onChange={(e) => setSkillToDelete(e.target.value)}
                   className="flex-grow p-2 border border-gray-300 rounded shadow-sm"
                 >
                   <option value="">Select a skill to delete</option>
-                  {user.SKILLS.map(skill => (
+                  {user.SKILLS.map((skill) => (
                     <option key={skill.skill_name} value={skill.skill_name}>
                       {skill.skill_name}
                     </option>
@@ -302,34 +317,43 @@ const handleFileChange = async (event) => {
             )}
           </div>
           {editMode && <EditProfile user={user} closeEdit={handleEditToggle} />}
-          {editAvailability && <EditAvailability user={user} closeEdit={handleAvailabilityToggle} />}
+          {editAvailability && (
+            <EditAvailability
+              user={user}
+              closeEdit={handleAvailabilityToggle}
+            />
+          )}
           <div className="space-y-6">
             <h2 className="text-xl font-bold text-white">
               <ActivityIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
               Skills
             </h2>
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-              {user && user.SKILLS && user.SKILLS.map((skill) => (
-                <UserSkill
-                  key={skill.id}
-                  skillName={skill.skill_name}
-                  proficiency={skill.proficiency}
-                />
-              ))}
+              {user &&
+                user.SKILLS &&
+                user.SKILLS.map((skill) => (
+                  <UserSkill
+                    key={skill.id}
+                    skillName={skill.skill_name}
+                    proficiency={skill.proficiency}
+                  />
+                ))}
+            </div>
+            <h2 className="text-xl font-bold text-white">
+              <CalendarIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+              Availability
+            </h2>
+            <div>
+              {<AvailabilitySchedule availability={user.AVAILABILITY} />}
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-
-  
-  
-  
 }
 
 // SVG icons are assumed to be defined somewhere else as before.
-
 
 // SVG icons remain unchanged, included in your component.
 
@@ -411,25 +435,7 @@ function CalendarIcon(props) {
   );
 }
 
-function ClockIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
-  );
-}
+
 
 function CodeIcon(props) {
   return (
