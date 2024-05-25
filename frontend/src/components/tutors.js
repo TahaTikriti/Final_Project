@@ -2,36 +2,28 @@ import React, { useState, useEffect } from 'react';
 
 export default function Tutors() {
   const [tutors, setTutors] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchType, setSearchType] = useState('name'); // Default search type is 'name'
+  const [location, setLocation] = useState('');
+  const [major, setMajor] = useState('');
+  const [gender, setGender] = useState('');
+  const [hourlyRate, setHourlyRate] = useState('');
+  const [skillName, setSkillName] = useState('');
 
   useEffect(() => {
-    if (searchTerm.trim() === '') {
-      fetchTutors('all'); // Fetch all tutors if search term is empty
-    } else {
-      fetchTutors(searchType, searchTerm.trim()); // Filter based on type and term
-    }
-  }, [searchType, searchTerm]);
+    fetchTutors();
+  }, [location, major, gender, hourlyRate, skillName]);
 
-  const fetchTutors = async (type, term = '') => {
+  const fetchTutors = async () => {
     let url = 'http://localhost:5000/users'; // Default URL to fetch all tutors
-    if (term) {
-      switch (type) {
-        case 'location':
-          url = `http://localhost:5000/searchbylocation?location=${term}`;
-          break;
-        case 'university':
-          url = `http://localhost:5000/searchbyuni?uni=${term}`;
-          break;
-        case 'skill':
-          url = `http://localhost:5000/searchbyskill?skillname=${term}`;
-          break;
-        case 'name':
-          url = `http://localhost:5000/searchbyname?FULL_NAME=${term}`;
-          break;
-        default:
-          break;
-      }
+    const queryParams = [];
+
+    if (location) queryParams.push(`location=${location}`);
+    if (major) queryParams.push(`major=${major}`);
+    if (gender) queryParams.push(`gender=${gender}`);
+    if (hourlyRate) queryParams.push(`hourlyRate=${hourlyRate}`);
+    if (skillName) queryParams.push(`skillname=${skillName}`);
+
+    if (queryParams.length) {
+      url = `http://localhost:5000/search?${queryParams.join('&')}`;
     }
 
     try {
@@ -47,34 +39,50 @@ export default function Tutors() {
     }
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleTypeChange = (event) => {
-    setSearchType(event.target.value);
-  };
-
   return (
     <>
-     
       <main className="bg-gray-100 dark:bg-gray-900 py-12 md:py-16">
         <div className="container mx-auto px-4 md:px-6">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-8">Our Experienced Tutors</h1>
           <div className="flex gap-4 mb-8">
+            <select value={location} onChange={(e) => setLocation(e.target.value)} className="p-2 border rounded-lg">
+              <option value="">All Locations</option>
+              <option value="TRIPOLI">TRIPOLI</option>
+              <option value="BEIRUT">BEIRUT</option>
+              <option value="SAIDA">SAIDA</option>
+              <option value="SOUR">SOUR</option>
+            </select>
             <input
               type="text"
-              placeholder="Search tutors"
-              value={searchTerm}
-              onChange={handleSearchChange}
+              placeholder="Major"
+              value={major}
+              onChange={(e) => setMajor(e.target.value)}
               className="p-2 border rounded-lg w-full"
             />
-            <select value={searchType} onChange={handleTypeChange} className="p-2 border rounded-lg">
-              <option value="name">Name</option>
-              <option value="location">Location</option>
-              <option value="university">University</option>
-              <option value="skill">Skill</option>
-            </select>
+           <select
+  value={gender}
+  onChange={(e) => setGender(e.target.value)}
+  className="p-2 border rounded-lg w-full"
+>
+  <option value="">Select Gender</option>
+  <option value="Male">Male</option>
+  <option value="Female">Female</option>
+</select>
+
+            <input
+              type="text"
+              placeholder="Hourly Rate"
+              value={hourlyRate}
+              onChange={(e) => setHourlyRate(e.target.value)}
+              className="p-2 border rounded-lg w-full"
+            />
+            <input
+              type="text"
+              placeholder="Skill Name"
+              value={skillName}
+              onChange={(e) => setSkillName(e.target.value)}
+              className="p-2 border rounded-lg w-full"
+            />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {tutors.length > 0 ? (
@@ -86,9 +94,7 @@ export default function Tutors() {
                       <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{tutor.FULL_NAME}</h3>
                       <p className="text-gray-600 dark:text-gray-400">{tutor.BIO || 'No bio available'}</p>
                       <div className="flex items-center">
-                        {Array(5).fill().map((_, i) => (
-                          <StarIcon key={i} />
-                        ))}
+                        <StarIcon />
                         <span className="ml-2 text-gray-600 dark:text-gray-400">Rating Placeholder</span>
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -103,7 +109,6 @@ export default function Tutors() {
                   </div>
                 </div>
               ))
-              
             ) : (
               <div className="col-span-full text-center text-gray-500">No tutors found. Try adjusting your search criteria.</div>
             )}

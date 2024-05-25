@@ -83,6 +83,7 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 // Route to fetch all users
 app.get("/users", async (req, res) => {
   try {
+    console.log(req.query)
     const users = await User.find().toArray();
     res.json(users);
   } catch (error) {
@@ -661,6 +662,36 @@ app.post("/delete-skill", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+app.get('/search', async (req, res) => {
+  try {
+      const { location, major, hourlyRate, gender, skillname } = req.query;
+
+      // Construct a dynamic query with partial matching using regular expressions
+      let query = {};
+      if (location) query.LOCATION = { $regex: `^${location}`, $options: 'i' }; // Starts with, case-insensitive
+      if (major) query.MAJOR = { $regex: `^${major}`, $options: 'i' }; // Starts with, case-insensitive
+      if (gender) query.GENDER = { $regex: `^${gender}`, $options: 'i' }; // Starts with, case-insensitive
+      if (hourlyRate) query.HOURLY_RATE = { $regex: `^${hourlyRate}`, $options: 'i' }; // Starts with, case-insensitive
+      if (skillname) query["SKILLS.skill_name"] = { $regex: `^${skillname}`, $options: 'i' }; // Starts with, case-insensitive
+
+      const users = await User.find(query).toArray();
+      
+      if (users.length > 0) {
+          res.status(200).json(users);
+      } else {
+          res.status(404).send('No users found matching the criteria.');
+      }
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).send('Server error');
+  }
+});
+
+
+
+
+
+
 
 // Start the server
 app.listen(PORT, () => {
