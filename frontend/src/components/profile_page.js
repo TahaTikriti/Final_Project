@@ -344,7 +344,7 @@ export default function ProfilePage() {
               Availability
             </h2>
             <div>
-              {<AvailabilitySchedule availability={user.AVAILABILITY} />}
+              {user.AVAILABILITY && <AvailabilitySchedule availability={user.AVAILABILITY} />}
             </div>
           </div>
         </div>

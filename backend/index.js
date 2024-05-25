@@ -706,28 +706,6 @@ app.get('/search', async (req, res) => {
 
 
 
-
-
-
-function isValidAvailability(availability) {
-  const days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-  return days.every(
-    (day) =>
-      Array.isArray(availability[day]) &&
-      availability[day].every(
-        (range) => Array.isArray(range) && range.length === 2
-      )
-  );
-}
-
 app.post("/update-availability", async (req, res) => {
   const userEmail = req.session.user.email; // Ensure you have session handling setup
   const { availability } = req.body;
