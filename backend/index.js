@@ -83,6 +83,7 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 // Route to fetch all users
 app.get("/users", async (req, res) => {
   try {
+    console.log(req.query)
     const users = await User.find().toArray();
     res.json(users);
   } catch (error) {
@@ -553,15 +554,23 @@ app.post("/update-profile", async (req, res) => {
 
   console.log(req.body);
   const userId = req.session.user.id; // Assuming this is how you store user IDs in the session
-  const { BIO, LOCATION, skills, HOURLY_RATE, MAJOR } = req.body; // Including MAJOR in the destructured assignment
+  const { BIO, LOCATION, skills, HOURLY_RATE, MAJOR } = req.body;
 
   let updates = { $set: {}, $push: {} };
 
   // Check each field explicitly to ensure it's not undefined, null, or an empty string
   if (typeof BIO === 'string' && BIO.trim() !== '') updates.$set.BIO = BIO.trim();
   if (typeof LOCATION === 'string' && LOCATION.trim() !== '') updates.$set.LOCATION = LOCATION.trim();
-  if (typeof HOURLY_RATE === 'string' && HOURLY_RATE.trim() !== '') updates.$set.HOURLY_RATE = HOURLY_RATE.trim(); // Add HOURLY_RATE to updates
-  if (typeof MAJOR === 'string' && MAJOR.trim() !== '') updates.$set.MAJOR = MAJOR.trim(); // Add MAJOR to updates
+  if (typeof HOURLY_RATE === 'string' && HOURLY_RATE.trim() !== '') {
+    // Convert HOURLY_RATE to integer before updating
+    const parsedRate = parseInt(HOURLY_RATE.trim(), 10);
+    if (!isNaN(parsedRate)) { // Ensure the conversion to integer was successful
+      updates.$set.HOURLY_RATE = parsedRate;
+    } else {
+      return res.status(400).json({ message: "Invalid hourly rate" });
+    }
+  }
+  if (typeof MAJOR === 'string' && MAJOR.trim() !== '') updates.$set.MAJOR = MAJOR.trim();
 
   if (Array.isArray(skills)) {
     // Filter out any skills that do not have both name and proficiency provided
@@ -661,6 +670,44 @@ app.post("/delete-skill", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+app.get('/search', async (req, res) => {
+  try {
+      const { location, major, hourlyRate, gender, skillname } = req.query;
+
+      // Construct a dynamic query with partial matching using regular expressions
+      let query = {};
+      if (location) query.LOCATION = { $regex: location, $options: 'i' }; // Case-insensitive, partial match
+      if (major) query.MAJOR = { $regex: major, $options: 'i' }; // Case-insensitive, partial match
+      if (gender) query.GENDER = { $regex: gender, $options: 'i' }; // Case-insensitive, partial match
+      if (hourlyRate) {
+        // Convert hourlyRate to a number and perform numeric comparison
+        const rate = parseFloat(hourlyRate);
+        if (!isNaN(rate)) {
+          query.HOURLY_RATE = { $lte: rate }; // Less than or equal to the specified rate
+        } else {
+          return res.status(400).json({ message: "Invalid hourly rate provided" });
+        }
+      }
+      if (skillname) query["SKILLS.skill_name"] = { $regex: skillname, $options: 'i' }; // Case-insensitive, partial match
+
+      const users = await User.find(query);
+      
+      if (await users.count() > 0) {
+          res.status(200).json(await users.toArray());
+      } else {
+          res.status(404).send('No users found matching the criteria.');
+      }
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).send('Server error');
+  }
+});
+
+
+
+
+
+
 
 function isValidAvailability(availability) {
   const days = [
