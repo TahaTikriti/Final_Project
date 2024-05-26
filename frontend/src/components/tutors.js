@@ -216,43 +216,59 @@ export default function Tutors() {
                 <div
                   key={tutor.EMAIL}
                   onClick={() => navigate(`/view-profile/${tutor.EMAIL}`)}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
+                  className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
                 >
-                  <img
-                    alt="Tutor Image"
-                    className="w-full h-48 object-cover"
-                    src={tutor.PROFILE_PICTURE || "/placeholder.svg"}
-                  />
-                  <div className="p-6 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                        {tutor.FULL_NAME}
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        {tutor.BIO || "No bio available"}
-                      </p>
-                    </div>
-                    <button
-                      onClick={() =>
-                        window.open(
-                          `https://wa.me/${tutor.PHONE_NUMBER}`,
-                          "_blank"
-                        )
+                  <div className="flex justify-between px-4 pt-4">
+                    {/* Icon on the left */}
+                    <img
+                      src={Icon}
+                      alt="Left Icon"
+                      className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                    />
+
+                    {/* Icon on the right */}
+                    <img
+                      src={Icon}
+                      alt="Right Icon"
+                      className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                    />
+                  </div>
+                  <div className="flex flex-col items-center pb-10">
+                    <img
+                      className="w-24 h-24 mb-3 rounded-full shadow-lg"
+                      src={
+                        tutor.PROFILE_PICTURE
+                          ? `http://localhost:5000/${tutor.PROFILE_PICTURE.replace(
+                              /\\/g,
+                              "/"
+                            )}`
+                          : tutor.GENDER === "Male"
+                          ? "https://avatar.iran.liara.run/public/boy"
+                          : "https://avatar.iran.liara.run/public/girl"
                       }
-                      className="whatsapp-button"
-                    >
-                      <p>Contact</p>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        class="bi bi-whatsapp"
-                        viewBox="0 0 16 16"
+                      alt="Tutor Image"
+                    />
+                    <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                      {tutor.FULL_NAME}
+                    </h5>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {tutor.MAJOR || "No major available"}
+                    </span>
+                    <div className="flex mt-4 md:mt-6">
+                      <a
+                        href={`https://wa.me/${tutor.PHONE_NUMBER}`}
+                        target="_blank"
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                       >
-                        <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"></path>
-                      </svg>
-                    </button>
+                        Contact Me
+                      </a>
+                      <a
+                        href="#"
+                        className="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                      >
+                        View Profile
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))
@@ -262,41 +278,6 @@ export default function Tutors() {
               </div>
             )}
           </div>
-  {tutors.length > 0 ? (
-    tutors.map(tutor => (
-      <div key={tutor.EMAIL} className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-        <div className="flex justify-between px-4 pt-4">
-          {/* Icon on the left */}
-          <img src={Icon} alt="Left Icon" className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-
-          {/* Icon on the right */}
-          <img src={Icon} alt="Right Icon" className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-        </div>
-        <div className="flex flex-col items-center pb-10">
-          <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={
-            tutor.PROFILE_PICTURE
-              ? `http://localhost:5000/${tutor.PROFILE_PICTURE.replace(/\\/g, "/")}`
-              : tutor.GENDER === "Male"
-              ? "https://avatar.iran.liara.run/public/boy"
-              : "https://avatar.iran.liara.run/public/girl"
-          } alt="Tutor Image"/>
-          <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{tutor.FULL_NAME}</h5>
-          <span className="text-sm text-gray-500 dark:text-gray-400">{tutor.MAJOR || 'No major available'}</span>
-          <div className="flex mt-4 md:mt-6">
-            <a href={`https://wa.me/${tutor.PHONE_NUMBER}`} target="_blank" className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Contact Me</a>
-            <a href="#" className="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">View Profile</a>
-          </div>
-        </div>
-      </div>
-    ))
-  ) : (
-    <div className="col-span-full text-center text-gray-500">No tutors found. Try adjusting your search criteria.</div>
-  )}
-</div>
-
-
-
-
         </div>
       </main>
     </>
