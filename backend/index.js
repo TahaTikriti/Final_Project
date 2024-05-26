@@ -43,7 +43,7 @@ app.use(
     cookie: {
       secure: false, // Set to true if you're using https
       httpOnly: true,
-      maxAge: 3600000, // 1 hour
+      maxAge: 3600000*3, // 3 hour
     },
   })
 );
@@ -499,6 +499,19 @@ app.get("/user/:userId", async (req, res) => {
     const user = await User.findOne({
       _id: new mongoose.Types.ObjectId(req.params.userId),
     });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+// Route to fetch user data by email
+app.get("/get-user-by-email/:email", async (req, res) => {
+  try {
+    const user = await User.findOne({ EMAIL: req.params.email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
