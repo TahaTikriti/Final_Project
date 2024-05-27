@@ -13,22 +13,24 @@ const AvailabilitySchedule = ({ availability }) => {
    ];
 
   const formatTimeRange = (startTime, endTime) => {
-    const options = { hour: "2-digit", minute: "2-digit", hour12: true };
+    const options = { hour: "2-digit", minute: "2-digit", hour12: false };
 
-    let startDateTime;
-    if (startTime.includes(":") && !startTime.includes("T")) {
-      // startTime seems to be only a time, no date part, assume same date as endTime
-      const endDate = new Date(endTime);
-      const datePart = endDate.toISOString().split("T")[0]; // Extract the date part from endTime
-      startDateTime = new Date(`${datePart}T${startTime}`); // Combine with startTime
-    } else {
-      // startTime is assumed to be a full DateTime string
-      startDateTime = new Date(startTime);
-    }
+    // Function to extract time from either full datetime or just time
+    const extractTime = (timeStr) => {
+      if (timeStr.includes("T")) {
+        // It's a complete ISO string, extract time part
+        const date = new Date(timeStr);
+        return date.toLocaleTimeString("en-US", options).slice(0, 5);
+      } else {
+        // It's already just a time part, return as is
+        return timeStr;
+      }
+    };
 
-    const start = startDateTime.toLocaleTimeString("en-US", options);
-    const end = new Date(endTime).toLocaleTimeString("en-US", options);
-    return `${start} - ${end}`;
+    const startTimeFormatted = extractTime(startTime);
+    const endTimeFormatted = extractTime(endTime);
+
+    return `${startTimeFormatted} - ${endTimeFormatted}`;
   };
 
 return (
