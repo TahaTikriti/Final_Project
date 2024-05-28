@@ -140,12 +140,23 @@ const AppContent = () => {
     location.pathname === "/edit-profile" ||
     location.pathname === "/tutors" ||
     location.pathname === "/topics";
+  
+  const showFooter = location.pathname !== "/login" && location.pathname !== "/register";
+
 
   return (
     <>
       {showHeader && <Header />}
       <Routes>
-        <Route path="/" element={<HeroSection />} />
+        <Route
+          path="/"
+          element={
+            <>
+              <HeroSection />
+              <Introduction />
+            </>
+          }
+        />
         <Route path="/login" element={<SignInCard />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route
@@ -155,12 +166,10 @@ const AppContent = () => {
         <Route path="/topics" element={<Skills />} />
         <Route path="/tutors" element={<Tutors />} />
         <Route path="/team" element={<Team />} />
-        {/* Add the route for password reset */}
         <Route path="/reset-password" element={<PasswordResetPage />} />
         <Route path="/view-profile/:userEmail" element={<UserProfile />} />
       </Routes>
-      <Introduction />
-      <Footer />
+      {showFooter && <Footer />}
     </>
   );
 };

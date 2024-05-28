@@ -159,13 +159,15 @@ const SignInCard = () => {
               >
                 {otpSent ? "Verify OTP" : "Sign in"}
               </button>
-              <button
-                type="button"
-                onClick={handleResetPasswordRequest} // Handle password reset request
-                className="text-sm text-blue-600 hover:underline"
-              >
-                Forgot password?
-              </button>
+              {!otpSent && (
+                <button
+                  type="button"
+                  onClick={handleResetPasswordRequest} // Handle password reset request
+                  className="text-sm text-primary-500 hover:underline"
+                >
+                  Forgot password?
+                </button>
+              )}
             </form>
             {!otpSent && (
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">

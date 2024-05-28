@@ -24,14 +24,14 @@ const Footer_component = () => {
             name="Tutorium"
           />
           <Footer.LinkGroup>
-            <Footer.Link href="#">About</Footer.Link>
+            <Footer.Link href="">About</Footer.Link>
             <Footer.Link href="/team">Our Team</Footer.Link>
-            <Footer.Link href="#">Licensing</Footer.Link>
-            <Footer.Link href="#">Contact</Footer.Link>
+            <Footer.Link href="">Licensing</Footer.Link>
+            <Footer.Link href="">Contact</Footer.Link>
           </Footer.LinkGroup>
         </div>
         <Footer.Divider />
-        <Footer.Copyright href="#" by="Tutorium™" year={2024} />
+        <Footer.Copyright href="" by="Tutorium™" year={2024} />
       </div>
     </Footer>
   );
