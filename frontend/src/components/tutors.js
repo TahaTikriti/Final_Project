@@ -190,7 +190,7 @@ export default function Tutors() {
               className="search-input"
             />
             <input
-              type="text"
+              type="number"
               placeholder="Hourly Rate"
               value={hourlyRate}
               onChange={(e) => setHourlyRate(e.target.value)}
@@ -219,13 +219,6 @@ export default function Tutors() {
                   className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
                 >
                   <div className="flex justify-between px-4 pt-4">
-                    {/* Icon on the left */}
-                    <img
-                      src={Icon}
-                      alt="Left Icon"
-                      className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                    />
-
                     {/* Icon on the right */}
                     <img
                       src={Icon}
@@ -252,7 +245,7 @@ export default function Tutors() {
                       {tutor.FULL_NAME}
                     </h5>
                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {tutor.MAJOR || "No major available"}
+                      {tutor.MAJOR || "Major Not Set"}
                     </span>
                     <div className="flex mt-4 md:mt-6">
                       <a

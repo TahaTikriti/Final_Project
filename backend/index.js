@@ -683,6 +683,7 @@ app.post("/delete-skill", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+
 app.get('/search', async (req, res) => {
   try {
       const { location, major, hourlyRate, gender, skillname } = req.query;
@@ -690,8 +691,8 @@ app.get('/search', async (req, res) => {
       // Construct a dynamic query with partial matching using regular expressions
       let query = {};
       if (location) query.LOCATION = { $regex: location, $options: 'i' }; // Case-insensitive, partial match
-      if (major) query.MAJOR = { $regex: major, $options: 'i' }; // Case-insensitive, partial match
-      if (gender) query.GENDER = { $regex: gender, $options: 'i' }; // Case-insensitive, partial match
+      if (major) query.MAJOR = { $regex: `^${major}`, $options: 'i' }; // Matches from the start, case-insensitive
+      if (gender) query.GENDER = { $regex: `^${gender}$`, $options: 'i' }; // Exact case-insensitive match
       if (hourlyRate) {
         // Convert hourlyRate to a number and perform numeric comparison
         const rate = parseFloat(hourlyRate);
