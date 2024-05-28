@@ -154,11 +154,11 @@ export default function Tutors() {
               onBlur={() => setLocationStyle(baseStyle)}
               className="search-select"
             >
-              <option value="">All Locations</option>
-              <option value="TRIPOLI">TRIPOLI</option>
-              <option value="BEIRUT">BEIRUT</option>
-              <option value="SAIDA">SAIDA</option>
-              <option value="SOUR">SOUR</option>
+              <option value="" style={{ color: 'black' }}>All Locations</option>
+              <option value="TRIPOLI"style={{ color: 'black' }}>TRIPOLI</option>
+              <option value="BEIRUT"style={{ color: 'black' }}>BEIRUT</option>
+              <option value="SAIDA"style={{ color: 'black' }}>SAIDA</option>
+              <option value="SOUR"style={{ color: 'black' }}>SOUR</option>
             </select>
             <select
               value={gender}
@@ -173,9 +173,9 @@ export default function Tutors() {
               onBlur={() => setGenderStyle(baseStyle)}
               className="search-select"
             >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
+              <option value=""style={{ color: 'black' }}>Select Gender</option>
+              <option value="Male"style={{ color: 'black' }}>Male</option>
+              <option value="Female"style={{ color: 'black' }}>Female</option>
             </select>
           </div>
           <div className="search-row">
