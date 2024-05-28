@@ -154,11 +154,11 @@ export default function Tutors() {
               onBlur={() => setLocationStyle(baseStyle)}
               className="search-select"
             >
-              <option value="">All Locations</option>
-              <option value="TRIPOLI">TRIPOLI</option>
-              <option value="BEIRUT">BEIRUT</option>
-              <option value="SAIDA">SAIDA</option>
-              <option value="SOUR">SOUR</option>
+              <option value="" style={{ color: 'black' }}>All Locations</option>
+              <option value="TRIPOLI"style={{ color: 'black' }}>TRIPOLI</option>
+              <option value="BEIRUT"style={{ color: 'black' }}>BEIRUT</option>
+              <option value="SAIDA"style={{ color: 'black' }}>SAIDA</option>
+              <option value="SOUR"style={{ color: 'black' }}>SOUR</option>
             </select>
             <select
               value={gender}
@@ -173,9 +173,9 @@ export default function Tutors() {
               onBlur={() => setGenderStyle(baseStyle)}
               className="search-select"
             >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
+              <option value=""style={{ color: 'black' }}>Select Gender</option>
+              <option value="Male"style={{ color: 'black' }}>Male</option>
+              <option value="Female"style={{ color: 'black' }}>Female</option>
             </select>
           </div>
           <div className="search-row">
@@ -190,7 +190,7 @@ export default function Tutors() {
               className="search-input"
             />
             <input
-              type="text"
+              type="number"
               placeholder="Hourly Rate"
               value={hourlyRate}
               onChange={(e) => setHourlyRate(e.target.value)}
@@ -219,13 +219,6 @@ export default function Tutors() {
                   className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
                 >
                   <div className="flex justify-between px-4 pt-4">
-                    {/* Icon on the left */}
-                    <img
-                      src={Icon}
-                      alt="Left Icon"
-                      className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                    />
-
                     {/* Icon on the right */}
                     <img
                       src={Icon}
@@ -252,7 +245,7 @@ export default function Tutors() {
                       {tutor.FULL_NAME}
                     </h5>
                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {tutor.MAJOR || "No major available"}
+                      {tutor.MAJOR || "Major Not Set"}
                     </span>
                     <div className="flex mt-4 md:mt-6">
                       <a
