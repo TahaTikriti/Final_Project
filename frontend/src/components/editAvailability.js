@@ -44,6 +44,7 @@ function EditAvailability({ closeEdit }) {
       console.log("Availability Update successful:", response.data);
       alert("Availability updated successfully!");
       closeEdit();
+      window.location.reload();
     } catch (error) {
       console.error(
         "Error updating availability:",
@@ -110,7 +111,7 @@ function EditAvailability({ closeEdit }) {
           <div className="flex justify-end gap-4 mt-4">
             <button
               onClick={handleSubmit}
-              className="bg-primary-700 hover:bg-primary-800 text-white px-5 py-2 rounded"
+              className="text-white bg-blue-600 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center"
             >
               Save Changes
             </button>

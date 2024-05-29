@@ -248,29 +248,36 @@ export default function ProfilePage() {
                 accept="image/*"
               />
             </div>
-            <div className="text-center">
+            <div className="">
               <h1 className="text-2xl font-bold md:text-3xl text-white">
                 <UserIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 {user.FULL_NAME}
               </h1>
-              <p className="text-gray-500 dark:text-gray-400">
-                <BookIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
-                {user.UNIVERSITY_NAME}
-              </p>
-              <p className="text-gray-500 dark:text-gray-400">
-                <MajorIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
-                {user.MAJOR}
-              </p>
-              <p className="text-gray-500 dark:text-gray-400">
-                <LocationPinIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
-                {user.LOCATION}
-              </p>
-              {user.HOURLY_RATE && (
-                <p className="text-gray-500 dark:text-gray-400">
-                  <FaDollarSign className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
-                  {`${parseFloat(user.HOURLY_RATE).toFixed(2)}`} / Hr
+            </div>
+            <div className="text-left space-y-2 mr-6 ">
+             
+              <div>
+                <p className="text-gray-500 dark:text-gray-400 mb-2">
+                  <UniversityIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+                  {user.UNIVERSITY_NAME}
                 </p>
-              )}
+                <p className="text-gray-500 dark:text-gray-400 mb-2 break-words">
+                  <BookIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+                  {user.MAJOR}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-500 dark:text-gray-400 mb-2 break-words">
+                  <LocationPinIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+                  {user.LOCATION}
+                </p>
+                <p className="text-gray-500 dark:text-gray-400 mb-2 break-words">
+                  <FaDollarSign className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+                  {(user.HOURLY_RATE ?? 0).toFixed(2)} / Hr
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
               <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>
             </div>
             <div className="flex flex-row justify-end gap-2">
@@ -316,6 +323,7 @@ export default function ProfilePage() {
               </div>
             )}
           </div>
+
           {editMode && <EditProfile user={user} closeEdit={handleEditToggle} />}
           {editAvailability && (
             <EditAvailability
@@ -344,7 +352,9 @@ export default function ProfilePage() {
               Availability
             </h2>
             <div>
-              {user.AVAILABILITY && <AvailabilitySchedule availability={user.AVAILABILITY} />}
+              {user.AVAILABILITY && (
+                <AvailabilitySchedule availability={user.AVAILABILITY} />
+              )}
             </div>
           </div>
         </div>
@@ -434,8 +444,6 @@ function CalendarIcon(props) {
     </svg>
   );
 }
-
-
 
 function CodeIcon(props) {
   return (

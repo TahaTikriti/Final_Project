@@ -8,8 +8,24 @@ const PasswordResetPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [localError, setLocalError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  
+
   const navigate = useNavigate();
+
+  const isStrongPassword = (password) => {
+    const minLength = 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    return (
+      password.length >= minLength &&
+      hasUppercase &&
+      hasLowercase &&
+      hasDigit &&
+      hasSpecialChar
+    );
+  };
 
   const handleResetPassword = async (event) => {
     event.preventDefault();
@@ -20,6 +36,14 @@ const PasswordResetPage = () => {
       // Add password confirmation validation
       if (newPassword !== confirmPassword) {
         setLocalError("Passwords do not match");
+        return;
+      }
+
+      // Add strong password validation
+      if (!isStrongPassword(newPassword)) {
+        setLocalError(
+          "Password must be at least 8 characters long, include uppercase and lowercase letters, a digit, and a special character."
+        );
         return;
       }
 
@@ -34,7 +58,6 @@ const PasswordResetPage = () => {
       setLocalError(errorMsg);
     }
   };
-
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -102,7 +125,9 @@ const PasswordResetPage = () => {
               )}
               {successMessage && (
                 <div>
-                  <p className="text-sm text-green-500 mb-2">{successMessage}</p>
+                  <p className="text-sm text-green-500 mb-2">
+                    {successMessage}
+                  </p>
                   <button
                     onClick={(e) => {
                       e.preventDefault();

@@ -19,6 +19,7 @@ const SignInCard = () => {
         PASSWORD: password,
       });
       setOtpSent(true);
+      alert("OTP sent to your email!");
       setLocalError("");
     } catch (error) {
       const errorMsg = error.response
