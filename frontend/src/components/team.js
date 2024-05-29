@@ -1,4 +1,6 @@
 import React from 'react';
+import rabihImage from '../images/rabih.jpg';
+import tahaImage from '../images/taha.jpg';
 
 const Team = () => {
   return (
@@ -6,22 +8,22 @@ const Team = () => {
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
           <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Our Team</h2>
-          <p className="font-light text-gray-500 sm:text-xl dark:text-gray-400">
-            Explore the whole collection of open-source web components and elements built with the utility classes from Tailwind
-          </p>
+          
         </div>
         <div className="grid gap-8 mb-6 lg:mb-16 md:grid-cols-2">
+          
+          {/* Rabih's profile */}
           <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
             <a href="#">
-              <img className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png" alt="Bonnie Avatar" />
+              <img className="w-48 h-48 rounded-lg sm:rounded-none sm:rounded-l-lg" src={rabihImage} alt="Rabih Avatar" />
             </a>
             <div className="p-5">
               <h3 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <a href="#">Chat-gpt</a>
+                <a href="#">Rabih Kouzayha</a>
               </h3>
-              <span className="text-gray-500 dark:text-gray-400">CEO & Web Developer</span>
+              <span className="text-gray-500 dark:text-gray-400">MERN STACK DEV</span>
               <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
-                Bonnie drives the technical strategy of the flowbite platform and brand.
+                Rabih drives the technical strategy of the platform and brand.
               </p>
               <ul className="flex space-x-4 sm:mt-0">
                 <li>
@@ -33,41 +35,19 @@ const Team = () => {
               </ul>
             </div>
           </div>
-          {/* Additional team member */}
+
+          {/* Taha's profile */}
           <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
             <a href="#">
-              <img className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png" alt="Jese Avatar" />
+              <img className="w-48 h-48 rounded-lg sm:rounded-none sm:rounded-l-lg" src={tahaImage} alt="Taha Avatar" />
             </a>
             <div className="p-5">
               <h3 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <a href="#">Rabih kouzayha</a>
+                <a href="#">Taha Tekriti</a>
               </h3>
-              <span className="text-gray-500 dark:text-gray-400">CTO</span>
+              <span className="text-gray-500 dark:text-gray-400">MERN STACK DEV</span>
               <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
-                Jese drives the technical strategy of the flowbite platform and brand.
-              </p>
-              <ul className="flex space-x-4 sm:mt-0">
-                <li>
-                  <a href="#" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                    {/* Social media icon */}
-                  </a>
-                </li>
-                {/* Additional list items for other social media links */}
-              </ul>
-            </div>
-          </div>
-          {/* Additional team member */}
-          <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
-              <img className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gouch.png" alt="Michael Avatar" />
-            </a>
-            <div className="p-5">
-              <h3 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <a href="#">Taha tekriti</a>
-              </h3>
-              <span className="text-gray-500 dark:text-gray-400">Senior Front-end Developer</span>
-              <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
-                Michael drives the technical strategy of the flowbite platform and brand.
+                Taha drives the technical strategy of the platform and brand.
               </p>
               <ul className="flex space-x-4 sm:mt-0">
                 <li>
