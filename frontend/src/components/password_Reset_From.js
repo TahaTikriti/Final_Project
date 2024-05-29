@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import logo from "../images/tutorium-favicon-color.png";
 
 const PasswordResetPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [localError, setLocalError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  
+  const navigate = useNavigate();
 
   const handleResetPassword = async (event) => {
     event.preventDefault();
@@ -35,6 +39,19 @@ const PasswordResetPage = () => {
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/");
+          }}
+          className="flex items-center space-x-3 rtl:space-x-reverse mb-2"
+        >
+          <img src={logo} className="h-10" alt="Tutorium Logo" />
+          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+            Tutorium
+          </span>
+        </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -84,14 +101,27 @@ const PasswordResetPage = () => {
                 <p className="text-sm text-red-500">{localError}</p>
               )}
               {successMessage && (
-                <p className="text-sm text-green-500">{successMessage}</p>
+                <div>
+                  <p className="text-sm text-green-500 mb-2">{successMessage}</p>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate("/login");
+                    }}
+                    className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  >
+                    Back to Login
+                  </button>
+                </div>
               )}
-              <button
-                type="submit"
-                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              >
-                Reset Password
-              </button>
+              {!successMessage && (
+                <button
+                  type="submit"
+                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                >
+                  Reset Password
+                </button>
+              )}
             </form>
           </div>
         </div>
