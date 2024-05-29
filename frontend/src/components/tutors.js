@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../assets/icons/tutorium-favicon-color.png';  // Adjust the path and filename as necessary
+import { v4 as uuidv4 } from 'uuid'; // Import UUID library
+
 
 export default function Tutors() {
   const [tutors, setTutors] = useState([]);
@@ -154,11 +156,21 @@ export default function Tutors() {
               onBlur={() => setLocationStyle(baseStyle)}
               className="search-select"
             >
-              <option value="" style={{ color: 'black' }}>All Locations</option>
-              <option value="TRIPOLI"style={{ color: 'black' }}>TRIPOLI</option>
-              <option value="BEIRUT"style={{ color: 'black' }}>BEIRUT</option>
-              <option value="SAIDA"style={{ color: 'black' }}>SAIDA</option>
-              <option value="SOUR"style={{ color: 'black' }}>SOUR</option>
+              <option value="" style={{ color: "black" }}>
+                All Locations
+              </option>
+              <option value="TRIPOLI" style={{ color: "black" }}>
+                TRIPOLI
+              </option>
+              <option value="BEIRUT" style={{ color: "black" }}>
+                BEIRUT
+              </option>
+              <option value="SAIDA" style={{ color: "black" }}>
+                SAIDA
+              </option>
+              <option value="SOUR" style={{ color: "black" }}>
+                SOUR
+              </option>
             </select>
             <select
               value={gender}
@@ -173,9 +185,15 @@ export default function Tutors() {
               onBlur={() => setGenderStyle(baseStyle)}
               className="search-select"
             >
-              <option value=""style={{ color: 'black' }}>Select Gender</option>
-              <option value="Male"style={{ color: 'black' }}>Male</option>
-              <option value="Female"style={{ color: 'black' }}>Female</option>
+              <option value="" style={{ color: "black" }}>
+                Select Gender
+              </option>
+              <option value="Male" style={{ color: "black" }}>
+                Male
+              </option>
+              <option value="Female" style={{ color: "black" }}>
+                Female
+              </option>
             </select>
           </div>
           <div className="search-row">
@@ -236,8 +254,8 @@ export default function Tutors() {
                               "/"
                             )}`
                           : tutor.GENDER === "Male"
-                          ? "https://avatar.iran.liara.run/public/boy"
-                          : "https://avatar.iran.liara.run/public/girl"
+                          ? `https://avatar.iran.liara.run/public/boy?random=${uuidv4()}`
+                          : `https://avatar.iran.liara.run/public/girl?random=${uuidv4()}`
                       }
                       alt="Tutor Image"
                     />
