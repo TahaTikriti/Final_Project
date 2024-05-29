@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate} from "react-router-dom";
 import axios from "axios";
-import { FaDollarSign } from "react-icons/fa";
+import { FaDollarSign, FaArrowLeft, FaWhatsapp } from "react-icons/fa";
 import AvailabilitySchedule from "./AvailabilitySchedule";
 import UserSkill from "./UserSkill";
 
@@ -9,7 +9,7 @@ function UserProfile() {
   const { userEmail } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -26,8 +26,12 @@ function UserProfile() {
 
     fetchUser();
   }, [userEmail]);
+
   const handleContactClick = () => {
     window.open(`https://wa.me/${user.PHONE_NUMBER}`, "_blank");
+  };
+  const handleBackClick = () => {
+    navigate("/tutors"); // Navigate back to the "Browse Tutors" page
   };
 
   if (loading) {
@@ -122,17 +126,17 @@ function UserProfile() {
                 className="object-cover h-full w-full"
               />
             </div>
-            <div className="text-center">
+            <div className="">
               <h1 className="text-2xl font-bold md:text-3xl text-white">
                 <UserIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 {user.FULL_NAME}
               </h1>
               <p className="text-gray-500 dark:text-gray-400">
-                <BookIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+                <UniversityIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 {user.UNIVERSITY_NAME}
               </p>
               <p className="text-gray-500 dark:text-gray-400">
-                <MajorIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
+                <BookIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
                 {user.MAJOR}
               </p>
               <p className="text-gray-500 dark:text-gray-400">
@@ -148,10 +152,20 @@ function UserProfile() {
               <p className="text-gray-500 dark:text-gray-400">{user.BIO}</p>
             </div>
             <div className="flex flex-row justify-end gap-2">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={handleBackClick}
+                  className="flex items-center px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                >
+                  <FaArrowLeft className="mr-2" />
+                  Back to Tutors
+                </button>
+              </div>
               <button
                 onClick={handleContactClick}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
+                <FaWhatsapp className="mr-2" />
                 Contact Me
               </button>
             </div>

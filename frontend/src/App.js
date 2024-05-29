@@ -139,7 +139,9 @@ const AppContent = () => {
     location.pathname === "/profile" ||
     location.pathname === "/edit-profile" ||
     location.pathname === "/tutors" ||
-    location.pathname === "/topics";
+    location.pathname === "/team" ||
+    location.pathname === "/topics" ||
+    /^\/view-profile\/.+/.test(location.pathname);
   
   const showFooter = location.pathname !== "/login" && location.pathname !== "/register";
 

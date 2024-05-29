@@ -4,7 +4,9 @@ import UserSkill from "./UserSkill";
 import AvailabilitySchedule from "./AvailabilitySchedule";
 import EditProfile from "./editProfile";
 import EditAvailability from "./editAvailability";
-import { FaDollarSign } from "react-icons/fa";
+import { FaDollarSign, FaClock, FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+
 export let userBio = null;
 export let userLocation = null;
 export let userHourlRate = null;
@@ -255,7 +257,6 @@ export default function ProfilePage() {
               </h1>
             </div>
             <div className="text-left space-y-2 mr-6 ">
-             
               <div>
                 <p className="text-gray-500 dark:text-gray-400 mb-2">
                   <UniversityIcon className="inline-block h-6 w-6 mr-2 text-gray-500 dark:text-blue-500" />
@@ -283,20 +284,23 @@ export default function ProfilePage() {
             <div className="flex flex-row justify-end gap-2">
               <button
                 onClick={handleAvailabilityToggle}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
+                <FaClock className="mr-2" />
                 Availability
               </button>
               <button
                 onClick={handleEditToggle}
-                className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100"
+                className="flex items-center px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-100"
               >
+                <FaEdit className="mr-2" />
                 Edit User
               </button>
               <button
                 onClick={toggleDeleteSkill}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                className="flex items-center px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
               >
+                <MdDelete className="mr-2" />
                 Delete a Skill
               </button>
             </div>
